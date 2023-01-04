@@ -20,3 +20,4 @@ Route::get('/home', function () {
 Route::get('/', [OchuController::class, 'Test'])->name('home');
 Route::get('/pattientarea', [OchuController::class, 'PattientArea'])->name('pattientarea');
 Route::get('/pattient', [OchuController::class, 'Pattient'])->name('pattient');
+Route::get('/branches', [OchuController::class, 'Branch'])->name('branches');

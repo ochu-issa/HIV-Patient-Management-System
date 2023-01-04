@@ -23,5 +23,11 @@ class OchuController extends Controller
         return view('Pattient');
     }
 
+    //Manage branches Controller
+    public function Branch()
+    {
+        return view('branches');
+    }
+
 }
 

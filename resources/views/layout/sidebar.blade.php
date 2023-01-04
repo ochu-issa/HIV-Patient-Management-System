@@ -40,8 +40,8 @@
                with font-awesome or any other icon font library -->
                <li class="nav-header active">NAVIGATION</li>
                   <li class="nav-item menu-close ">
-                      <a href="#" class="nav-link active" >
-                          <i class="fa fa-users"></i>
+                      <a href="#" class="nav-link" >
+                          <i class="nav-icon fa fa-users"></i>
                           <p>
                               Manage User
                               <i class="right fas fa-angle-left"></i>
@@ -49,7 +49,7 @@
                       </a>
                       <ul class="nav nav-treeview">
                           <li class="nav-item">
-                              <a href="{{ route('pattient')}}" class="nav-link active">
+                              <a href="{{ route('pattient')}}" class="nav-link">
                                   <i class="far fa fa-user-md"></i>
                                   <p> Pattients</p>
                               </a>
@@ -68,6 +68,7 @@
                           </li>
                       </ul>
                   </li>
+                  {{-- //psttient area --}}
                   <li class="nav-item">
                       <a href="{{ route('pattientarea') }}" class="nav-link">
                           <i class="nav-icon fas fa-th"></i>
@@ -77,6 +78,15 @@
                           </p>
                       </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{ route('branches') }}" class="nav-link">
+                        <i class="nav-icon fas fa-hospital"></i>
+
+                        <p>
+                            Branches
+                        </p>
+                    </a>
+                </li>
               </ul>
           </nav>
           <!-- /.sidebar-menu -->
