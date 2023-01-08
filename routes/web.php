@@ -34,4 +34,13 @@ Route::get('/Addbranches', [saveDataController::class, 'saveData'])->name('Addbr
 Route::delete('/branches/{id}', [saveDataController::class, 'deleteBranch'])->name('deleteBranch');
 //update branch
 Route::put('/branches/{id}', [saveDataController::class, 'updateRecord'])->name('updateBranch');
+//update status branch
+//Route::put('/branches/{id}', [saveDataController::class, 'updateStatus'])->name('updateStatus');
+// Route::put('/branches/{id}', function() {
+//     $controller1 = new saveDataController;
+//     $controller1->updateRecord()->name('updateBranch');
+
+//     $controller2 = new saveDataController;
+//     $controller2->updateStatus();
+// });
 

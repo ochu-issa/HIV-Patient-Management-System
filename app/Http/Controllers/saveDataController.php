@@ -43,7 +43,7 @@ class saveDataController extends Controller
     public function updateRecord(Request $request, $id){
         //validate the input
         $this->validate($request, [
-            'branch_name' => 'required|unique:branches',
+            'branch_name' => 'required|regex:/^[a-zA-Z\s]+$/',
         ]);
 
         //find the id
@@ -54,6 +54,18 @@ class saveDataController extends Controller
         $branch->save();
 
         return redirect()->route('branches')->with('success', 'Branch updated successfully!');
+    }
+
+    //update branch status
+    public function updateStatus(Request $request, $id){
+        //find branch id
+        $branch = Branch::find($id);
+
+        //save new status
+        $branch->status = 0;
+        $branch->save();
+
+        return redirect()->route('branches')->with('success', 'The branch now is Unactive');
     }
 
 

@@ -52,10 +52,12 @@
                                 <tr>
                                     <td>{{ $no }}</td>
                                     <td>{{ $branch->branch_name }}</td>
-                                    <td><span class="right badge badge-success">Active</span></td>
+                                    <td><span class="right badge badge-success" data-toggle="modal"
+                                        data-target="#update-status{{ $branch->id }}">Active</span></td>
                                     <td>
                                         <button class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                                        data-target="#edit-branch{{ $branch->id }}"><i class="fa fa-edit"></i></button>
+                                            data-target="#edit-branch{{ $branch->id }}"><i
+                                                class="fa fa-edit"></i></button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
                                             data-target="#delete-branch{{ $branch->id }}"><i
                                                 class="fa fa-trash"></i></button>
@@ -106,26 +108,27 @@
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                                <div class="modal-body">
-                                                    <p>
-                                                    <div class="row">
-                                                        <form action="{{route('updateBranch', $branch->id)}}" method="POST">
-                                                            @csrf
-                                                            @method('PUT')
+                                            <div class="modal-body">
+                                                <p>
+                                                <div class="row">
+                                                    <form action="{{ route('updateBranch', $branch->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
                                                         <div class="col col-md-12">
                                                             <label for="">Branch Name</label>
                                                             {{-- <input type="hidden" value="{{$branch->id}}"  name="branchid" id=""> --}}
-                                                            <input type="text" value="{{$branch->branch_name}}" name="branch_name" class="form-control"
-                                                                id="" placeholder="Enter branch name here ..." required>
+                                                            <input type="text" value="{{ $branch->branch_name }}"
+                                                                name="branch_name" class="form-control" id=""
+                                                                placeholder="Enter branch name here ..." required>
                                                         </div>
-                                                    </div>
-                                                    </p>
                                                 </div>
-                                                <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-default"
-                                                        data-dismiss="modal">Close</button>
-                                                    <button class="btn btn-primary">Save change</button>
-                                                </div>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Close</button>
+                                                <button class="btn btn-primary">Save change</button>
+                                            </div>
                                             </form>
                                         </div>
                                         <!-- /.modal-content -->
@@ -133,6 +136,33 @@
                                     <!-- /.modal-dialog -->
                                 </div>
                                 <!-- /.end of register branch modal -->
+
+                                {{-- update status modal --}}
+                                <div class="modal fade" id="update-status{{ $branch->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content bg-warning">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Warning Modal</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>One fine body&hellip;</p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <form action=""></form>
+                                                <button type="button" class="btn btn-outline-dark"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-outline-dark">Save changes</button>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
 
 
                                 @php
