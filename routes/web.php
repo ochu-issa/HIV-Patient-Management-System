@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OchuController;
+use App\Http\Controllers\saveDataController;
+use App\Http\Controllers\retrieveDataController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,4 +23,15 @@ Route::get('/home', function () {
 Route::get('/', [OchuController::class, 'Test'])->name('home');
 Route::get('/pattientarea', [OchuController::class, 'PattientArea'])->name('pattientarea');
 Route::get('/pattient', [OchuController::class, 'Pattient'])->name('pattient');
-Route::get('/branches', [OchuController::class, 'Branch'])->name('branches');
+Route::get('/doctor', [OchuController::class, 'Doctor'])->name('doctor');
+Route::get('/receptionist', [OchuController::class, 'Receptionist'])->name('receptionist');
+Route::get('/branchadmin', [OchuController::class, 'Branchadmin'])->name('branchadmin');
+
+//branches
+Route::get('/branches', [retrieveDataController::class, 'retrieveData'])->name('branches');
+Route::get('/Addbranches', [saveDataController::class, 'saveData'])->name('Addbranches');
+//delete branch
+Route::delete('/branches/{id}', [saveDataController::class, 'deleteBranch'])->name('deleteBranch');
+//update branch
+Route::put('/branches/{id}', [saveDataController::class, 'updateRecord'])->name('updateBranch');
+

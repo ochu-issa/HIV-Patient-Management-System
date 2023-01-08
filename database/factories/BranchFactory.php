@@ -16,9 +16,9 @@ class BranchFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'branch_name' => fake()->state(),
-            'status' => fake()->numberBetween(0,1),
-        ];
+        // return [
+        //     'branch_name' => fake()->state(),
+        //     'status' => fake()->numberBetween(0,1),
+        // ];
     }
 }

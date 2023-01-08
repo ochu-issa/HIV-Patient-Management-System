@@ -43,27 +43,33 @@
                       <a href="#" class="nav-link" >
                           <i class="nav-icon fa fa-users"></i>
                           <p>
-                              Manage User
+                              Manage Users
                               <i class="right fas fa-angle-left"></i>
                           </p>
                       </a>
                       <ul class="nav nav-treeview">
                           <li class="nav-item">
                               <a href="{{ route('pattient')}}" class="nav-link">
-                                  <i class="far fa fa-user-md"></i>
+                                  <i class="nav-icon far fas fa-procedures"></i>
                                   <p> Pattients</p>
                               </a>
                           </li>
                           <li class="nav-item">
-                              <a href="./index2.html" class="nav-link">
-                                  <i class="far fa-user"></i>
+                              <a href="{{route('doctor')}}" class="nav-link">
+                                  <i class="nav-icon far fa fa-user-md"></i>
                                   <p> Doctors</p>
                               </a>
                           </li>
                           <li class="nav-item">
-                              <a href="./index3.html" class="nav-link">
-                                  <i class="far fa fa-h-square"></i>
-                                  <p> Admins</p>
+                            <a href="{{route('receptionist')}}" class="nav-link">
+                                <i class="nav-icon fa fa-user-nurse"></i></i>
+                                <p> Receptionist</p>
+                            </a>
+                        </li>
+                          <li class="nav-item">
+                              <a href="{{route('branchadmin')}}" class="nav-link">
+                                  <i class="nav-icon far fas fa-id-card-alt"></i>
+                                  <p> Branch Admin</p>
                               </a>
                           </li>
                       </ul>
@@ -81,7 +87,6 @@
                   <li class="nav-item">
                     <a href="{{ route('branches') }}" class="nav-link">
                         <i class="nav-icon fas fa-hospital"></i>
-
                         <p>
                             Branches
                         </p>

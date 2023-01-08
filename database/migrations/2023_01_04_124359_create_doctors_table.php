@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('gender');
             $table->string('email');
             $table->string('phone_number')->nullable();
+            $table->boolean('branch_id');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

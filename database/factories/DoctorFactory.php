@@ -22,6 +22,7 @@ class DoctorFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'gender' => fake()->randomElement(['male', 'female']),
             'phone_number' => fake()->numerify('+255 7## ### ###'),
+            'branch_id' => fake()->numberBetween(1,100),
             'status' => fake()->numberBetween(0,1),
         ];
     }

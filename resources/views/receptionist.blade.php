@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Register Pattients</h1>
+                    <h1 class="m-0">Register Receptionist(s)</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Manage Pattient</li>
+                        <li class="breadcrumb-item active">Manage Receptionist(s)</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -24,10 +24,10 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">All Pattients</h3>
+                    <h3 class="card-title">All Doctor(s)</h3>
                     <button type="button" class="btn btn-small btn-primary float-right" data-toggle="modal"
                     data-target="#modal-lg"><i class="fa fa-plus"></i> Register new
-                        Pattient</button>
+                    Receptionist</button>
                 </div>
 
                 <!-- /.card-header -->
@@ -41,8 +41,7 @@
                                 <th>Address</th>
                                 <th>Email</th>
                                 <th>Phone Number</th>
-                                <th>Pattent Number</th>
-                                <th>View Process</th>
+                                <th>Branch Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,7 +60,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Register new Pattient</h4>
+                        <h4 class="modal-title">Register new Receptionist</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -105,6 +104,14 @@
                                 <label for="">Phone Number</label>
                                 <input type="text" name="address" class="form-control" id=""
                                     placeholder="255626560698" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-md-12">
+                                <label for="">branch Name</label>
+                                <select name="branchname" class="form-control" id="">
+                                    <option value="">--</option>
+                                </select>
                             </div>
                         </div>
                         </p>
