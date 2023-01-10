@@ -52,8 +52,17 @@
                                 <tr>
                                     <td>{{ $no }}</td>
                                     <td>{{ $branch->branch_name }}</td>
-                                    <td><span class="right badge badge-success" data-toggle="modal"
-                                        data-target="#update-status{{ $branch->id }}">Active</span></td>
+                                    <td>
+                                        @if ($branch->status == 1)
+                                        <span class="right badge badge-success" data-toggle="modal"
+                                        data-target="#update-status{{ $branch->id }}">Active</span>
+                                        @endif
+                                        @if ($branch->status == 0)
+                                        <span class="right badge badge-danger" data-toggle="modal"
+                                        data-target="#update-status-to-one{{ $branch->id }}">Unactive</span>
+                                        @endif
+
+                                    </td>
                                     <td>
                                         <button class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                                             data-target="#edit-branch{{ $branch->id }}"><i
@@ -142,21 +151,58 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content bg-warning">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Warning Modal</h4>
+                                                <h4 class="modal-title">Warning</h4>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>One fine body&hellip;</p>
+                                                <p>You are about to Deactivate the branch status&hellip;</p>
                                             </div>
+
                                             <div class="modal-footer justify-content-between">
-                                                <form action=""></form>
                                                 <button type="button" class="btn btn-outline-dark"
                                                     data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-outline-dark">Save changes</button>
+                                                <form action="{{route('updateStatus', $branch->id)}}" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+                                                <button class="btn btn-outline-dark">Deactivate</button>
+                                                </form>
                                             </div>
+
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+
+                                {{-- update status modal to zero --}}
+                                <div class="modal fade" id="update-status-to-one{{ $branch->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content bg-warning">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Warning</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>You are about to Activate the branch status&hellip;</p>
+                                            </div>
+
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-outline-dark"
+                                                    data-dismiss="modal">Close</button>
+                                                <form action="{{route('updateStatusToOne', $branch->id)}}" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+                                                <button class="btn btn-outline-dark">Activate</button>
+                                                </form>
+                                            </div>
+
                                         </div>
                                         <!-- /.modal-content -->
                                     </div>
