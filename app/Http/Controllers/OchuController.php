@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\User;
+use App\Models\Branch;
 
 class OchuController extends Controller
 {
@@ -49,26 +50,21 @@ class OchuController extends Controller
         return view('branchadmin');
     }
 
-    // public function saveDoctor(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'email' => 'required|unique:doctors|max:255',
-    //         'fname' => 'required',
-    //     ]);
+    public function testing()
+    {
+        return view('testing-modal');
+    }
 
-    //     $doctor_id = Doctor::create([
-    //         'f_name' => $request->f_name,
-    //         //
-    //     ])->id;
-            // other way....
-        // $doctor = new Doctor;
-        // $doctor->f_name = $request->f_name;
-        // $doctor->save();
-
-    //     $user = User::create([
-    //         'doctor_id' => $doctor_id
-    //     ]);
-    // }
+    public function responseCheck($id)
+    {
+        $branch = Branch::where('id', $id)->first();
+        //dd($branch);
+        return response()->json([
+            "name" => $branch->branch_name,
+            "status" => $branch->status,
+            "id" => $branch->id,
+        ]);
+    }
 
 }
 

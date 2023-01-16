@@ -21,11 +21,17 @@
     <section class="content">
         <div class="container-fluid">
             @if (session('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-check"></i> Alert!</h5>
-                    {{ session('success') }}
-                </div>
+                <script>
+                    $(document).ready(function() {
+                        toastr.success('{{ session('success') }}');
+                    });
+                </script>
+            @elseif (session('error'))
+                <script>
+                    $(document).ready(function() {
+                        toastr.error('{{ session('error') }}');
+                    });
+                </script>
             @endif
             <div class="card">
                 <div class="card-header">
@@ -54,20 +60,20 @@
                                     <td>{{ $branch->branch_name }}</td>
                                     <td>
                                         @if ($branch->status == 1)
-                                        <span class="right badge badge-success" data-toggle="modal"
-                                        data-target="#update-status{{ $branch->id }}">Active</span>
+                                            <span class="right badge badge-success" data-toggle="modal"
+                                                data-target="#update-status{{ $branch->id }}">Active</span>
                                         @endif
                                         @if ($branch->status == 0)
-                                        <span class="right badge badge-danger" data-toggle="modal"
-                                        data-target="#update-status-to-one{{ $branch->id }}">Unactive</span>
+                                            <span class="right badge badge-danger" data-toggle="modal"
+                                                data-target="#update-status-to-one{{ $branch->id }}">Unactive</span>
                                         @endif
 
                                     </td>
                                     <td>
-                                        <button class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                                            data-target="#edit-branch{{ $branch->id }}"><i
+
+                                        <button class="btn btn-secondary btn-sm" value="{{ $branch->id }}" id="edit-branch-btn"><i
                                                 class="fa fa-edit"></i></button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                             data-target="#delete-branch{{ $branch->id }}"><i
                                                 class="fa fa-trash"></i></button>
                                     </td>
@@ -106,46 +112,6 @@
                                 </div>
                                 <!-- /.modal -->
 
-                                {{-- edit  modal --}}
-                                <div class="modal fade" id="edit-branch{{ $branch->id }}">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Edit Branch</h4>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                <div class="row">
-                                                    <form action="{{ route('updateBranch', $branch->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="col col-md-12">
-                                                            <label for="">Branch Name</label>
-                                                            {{-- <input type="hidden" value="{{$branch->id}}"  name="branchid" id=""> --}}
-                                                            <input type="text" value="{{ $branch->branch_name }}"
-                                                                name="branch_name" class="form-control" id=""
-                                                                placeholder="Enter branch name here ..." required>
-                                                        </div>
-                                                </div>
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Close</button>
-                                                <button class="btn btn-primary">Save change</button>
-                                            </div>
-                                            </form>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
-                                <!-- /.end of register branch modal -->
-
                                 {{-- update status modal --}}
                                 <div class="modal fade" id="update-status{{ $branch->id }}">
                                     <div class="modal-dialog">
@@ -164,10 +130,10 @@
                                             <div class="modal-footer justify-content-between">
                                                 <button type="button" class="btn btn-outline-dark"
                                                     data-dismiss="modal">Close</button>
-                                                <form action="{{route('updateStatus', $branch->id)}}" method="POST">
+                                                <form action="{{ route('updateStatus', $branch->id) }}" method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                <button class="btn btn-outline-dark">Deactivate</button>
+                                                    <button class="btn btn-outline-dark">Deactivate</button>
                                                 </form>
                                             </div>
 
@@ -196,10 +162,11 @@
                                             <div class="modal-footer justify-content-between">
                                                 <button type="button" class="btn btn-outline-dark"
                                                     data-dismiss="modal">Close</button>
-                                                <form action="{{route('updateStatusToOne', $branch->id)}}" method="POST">
+                                                <form action="{{ route('updateStatusToOne', $branch->id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('POST')
-                                                <button class="btn btn-outline-dark">Activate</button>
+                                                    <button class="btn btn-outline-dark">Activate</button>
                                                 </form>
                                             </div>
 
@@ -239,7 +206,7 @@
                                 <div class="col col-md-12">
                                     <label for="">Branch Name</label>
                                     <input type="text" name="branchname" class="form-control" id=""
-                                        placeholder="Enter branch name here ..." required>
+                                        placeholder="Enter branch name here ...">
                                 </div>
                             </div>
                             </p>
@@ -256,5 +223,65 @@
         </div>
         <!-- /.end of register branch modal -->
 
+
+        <!-- Edit  Branch Modal -->
+        <div class="modal fade" id="edit-branch">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Branch</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{route('updateBranch')}}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <p>
+                            <div class="row">
+                                <div class="col col-md-12">
+                                    <label for="">Branch Name</label>
+
+                                    <input type="text" name="branch_name" class="form-control" id="input">
+                                    <input type="hidden" name="branch_id" class="form-control" id="inputId">
+
+                                </div>
+                            </div>
+                            </p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary">Save Change</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.end of register branch modal -->
+
     </section>
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '#edit-branch-btn', function() {
+                $('#edit-branch').modal('show');
+
+                var branch_id = $(this).val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/testing-response/" + branch_id,
+                    success: function(response) {
+                        branch_name = response.name;
+                        status = response.status;
+                        id = response.id;
+
+                        $("#input").val(branch_name);
+                        $("#inputId").val(id);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

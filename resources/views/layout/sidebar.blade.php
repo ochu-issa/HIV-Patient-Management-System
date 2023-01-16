@@ -15,7 +15,7 @@
                   <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
               </div>
               <div class="info">
-                  <a href="#" class="d-block"> {{Auth::user()->name}}</a>
+                  <a href="#" class="d-block"> {{ Auth::user()->name }}</a>
               </div>
           </div>
 
@@ -38,9 +38,9 @@
                   data-accordion="false">
                   <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               <li class="nav-header active">NAVIGATION</li>
+                  <li class="nav-header active">NAVIGATION</li>
                   <li class="nav-item menu-close ">
-                      <a href="#" class="nav-link" >
+                      <a href="#" class="nav-link">
                           <i class="nav-icon fa fa-users"></i>
                           <p>
                               Manage Users
@@ -49,25 +49,25 @@
                       </a>
                       <ul class="nav nav-treeview">
                           <li class="nav-item">
-                              <a href="{{ route('pattient')}}" class="nav-link">
+                              <a href="{{ route('pattient') }}" class="nav-link">
                                   <i class="nav-icon far fas fa-procedures"></i>
                                   <p> Pattients</p>
                               </a>
                           </li>
                           <li class="nav-item">
-                              <a href="{{route('doctor')}}" class="nav-link">
+                              <a href="{{ route('doctor') }}" class="nav-link">
                                   <i class="nav-icon far fa fa-user-md"></i>
                                   <p> Doctors</p>
                               </a>
                           </li>
                           <li class="nav-item">
-                            <a href="{{route('receptionist')}}" class="nav-link">
-                                <i class="nav-icon fa fa-user-nurse"></i></i>
-                                <p> Receptionist</p>
-                            </a>
-                        </li>
+                              <a href="{{ route('receptionist') }}" class="nav-link">
+                                  <i class="nav-icon fa fa-user-nurse"></i></i>
+                                  <p> Receptionist</p>
+                              </a>
+                          </li>
                           <li class="nav-item">
-                              <a href="{{route('branchadmin')}}" class="nav-link">
+                              <a href="{{ route('branchadmin') }}" class="nav-link">
                                   <i class="nav-icon far fas fa-id-card-alt"></i>
                                   <p> Branch Admin</p>
                               </a>
@@ -85,10 +85,26 @@
                       </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ route('branches') }}" class="nav-link">
+                      <a href="{{ route('branches') }}" class="nav-link">
+                          <i class="nav-icon fas fa-hospital"></i>
+                          <p>
+                              Branches
+                          </p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('testing') }}" class="nav-link">
                         <i class="nav-icon fas fa-hospital"></i>
                         <p>
-                            Branches
+                            Testing
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('setting') }}" class="nav-link">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>
+                            Settings
                         </p>
                     </a>
                 </li>

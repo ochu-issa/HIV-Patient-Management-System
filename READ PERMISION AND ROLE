@@ -1,0 +1,21 @@
+#ROLES========
+1- Super Admin
+2- BranchAdmin
+3- Doctors
+4- Receptionist
+
+#PERMISSIONS=======
+1-CRUD Branch Admin
+2-CRUD Doctors
+3-CRUD Receptionist
+4-CRUD Pattients
+5-Acceess Pattients
+6-Generate Reports
+
+ ==================================ROLES AND PERMISSIONS==============================
+
+        #SUPERADMIN            #BRANCHADMIN            #DOCTOR            #RECEPTIONIST
+      -All Permission       -CRUD Doctors           -Add Pattient        -Add Pattient
+                            -CRUD Receptionist      -Access Pattients
+                            -Generate Report
+

@@ -24,7 +24,7 @@ class AuthController extends Controller
         if(Auth::attempt(['email'=>$request->email, 'password'=>$request->password])){
             return redirect()->route('home')->with('success', '[Login Successfully]');
         }else{
-            return back()->with('error', 'Invalid Crediantial');
+            return redirect()->back()->with('error', 'Invalid Crediantial');
         }
 
 

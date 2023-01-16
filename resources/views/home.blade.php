@@ -17,6 +17,19 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    @if (session('success'))
+        <script>
+            $(document).ready(function() {
+                toastr.success('{{ session('success') }}');
+            });
+        </script>
+    @elseif (session('error'))
+        <script>
+            $(document).ready(function() {
+                toastr.error('{{ session('error') }}');
+            });
+        </script>
+    @endif
 
     <!-- Main content -->
     <section class="content">

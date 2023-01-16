@@ -15,33 +15,36 @@
     <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
 </head>
 
 <body class="hold-transition login-page">
+    @if (session('success'))
+        <script>
+            $(document).ready(function() {
+                toastr.success('{{ session('success') }}');
+            });
+        </script>
+    @elseif (session('error'))
+        <script>
+            $(document).ready(function() {
+                toastr.error('{{ session('error') }}');
+            });
+        </script>
+    @endif
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="" c#lass="h1"><b>HMS</b></a>
+                <a href="" class="h1"><b>HMS</b></a>
             </div>
             <div class="card-body">
-                @if (session('error'))
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-times"></i> Alert!</h5>
-                    {{ session('error') }}
-                </div>
-                @endif
-                @if (session('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-check"></i> Alert!</h5>
-                    {{ session('success') }}
-                </div>
-                @endif
+
                 <p class="login-box-msg">Sign in here&hellip;</p>
 
-                <form action="{{route('validate')}}" method="post">
+                <form action="{{ route('validate') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
                         <input type="email" name="email" class="form-control" placeholder="Email" required>
@@ -88,9 +91,9 @@
         <!-- /.card -->
     </div>
     <!-- /.login-box -->
+    <!-- Toastr -->
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
