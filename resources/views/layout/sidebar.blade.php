@@ -6,7 +6,7 @@
               style="opacity: .8">
           @auth
               @hasrole('Super-Admin')
-                  <span class="brand-text font-weight-light">HMS-SUPER-</span>
+                  <span class="brand-text font-weight-light">HMS-SUPER-ADMIN</span>
               @else
                   @hasrole('Doctor')
                       <span class="brand-text font-weight-light">HMS-DOCTOR</span>
