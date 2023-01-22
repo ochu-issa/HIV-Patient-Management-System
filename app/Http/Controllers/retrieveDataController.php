@@ -7,8 +7,10 @@ use App\Models\Branch;
 use App\Models\BranchAdmin;
 use App\Models\Receptionist;
 use App\Models\Doctor;
-use App\Models\Roles;
-use App\Models\Permissions;
+use App\Models\member;
+use App\Models\Pattient;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 //use DB;
 
@@ -17,19 +19,18 @@ class retrieveDataController extends Controller
     //retrieve branch data
     public function retrieveData()
     {
-        $branches = Branch::get();
+        $branches = Branch::where('branch_name', '!=' ,'Ministry of Health')->get();
         $no = 0;
         $no++;
-       //$branches = Branch::table('branches')->get();
         return view('branches', ['branches' => $branches, 'no' => $no]);
     }
 
     //retrieve branch admin data
     public function ShowBranchAdminData()
     {
-        $branchAdmins = BranchAdmin::get();
+        $branchAdmins = member::role('Branch-Admin')->get();
         $no = 1;
-        $branches = Branch::get();
+        $branches = Branch::where('branch_name', '!=' ,'Ministry of Health')->get();
 
         return view('branchadmin', ['branchAdmins'=>$branchAdmins, 'no'=>$no, 'branches'=>$branches]);
     }
@@ -37,9 +38,9 @@ class retrieveDataController extends Controller
     //retrieve Receptionist
     public function ShowReceptionistData()
     {
-        $receptionist = Receptionist::get();
+        $receptionist = member::role('Receptionist')->get();
         $no=1;
-        $branches = Branch::get();
+        $branches = Branch::where('branch_name', '!=' ,'Ministry of Health')->get();
 
         return view('receptionist', ['receptionists'=>$receptionist, 'no'=>$no, 'branches'=>$branches]);
     }
@@ -47,19 +48,30 @@ class retrieveDataController extends Controller
     //retrieve Doctors
     public function ShowDoctorsData()
     {
-        $doctors = Doctor::get();
+        $doctors = member::role('Doctor')->get();
+        $no = 1;
+        $branches = Branch::where('branch_name', '!=' ,'Ministry of Health')->get();
+
+        return view('doctor', ['doctors' => $doctors, 'no' => $no, 'branches' => $branches]);
+
+    }
+
+    //retrieve pattients
+    public function ShowPattientData()
+    {
+        $pattients = Pattient::get();
         $no = 1;
         $branches = Branch::get();
 
-        return view('doctor', ['doctors' => $doctors, 'no' => $no, 'branches' => $branches]);
+        return view('pattient', ['pattients' => $pattients, 'no' => $no, 'branches' => $branches]);
 
     }
 
     //Role and permission
     public function RolePermission()
     {
-        // $roles = Roles::get();
-        // $permissions = Permissions::get();
-        return view('roleandpermission');
+        $roles = Role::get();
+        $permissions = Permission::get();
+        return view('roleandpermission', ['permissions' => $permissions, 'roles' => $roles]);
     }
 }

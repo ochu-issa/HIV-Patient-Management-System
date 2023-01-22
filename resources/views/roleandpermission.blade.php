@@ -5,7 +5,10 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
+                    @can('Edit')
                     <h1 class="m-0">System Settings</h1>
+                    @endcan
+
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -42,57 +45,54 @@
                 <!-- /.card-body -->
             </div>
             <!-- /.card -->
-            <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Configuration</h3>
+            <div class="row">
+                @foreach ($roles as $role)
+                <div class="card card-outline card-primary col-md-6">
+                    <div class="card-header">
+                        <h3 class="card-title">{{$role->name}}</h3>
 
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col col-md-4"></div>
-                        <div class="col col-md-4 text-center">
-                            <label for="">Choose Role</label>
-                            {{-- <select name="rolename" id="" class="form-control">
-                                <option value="" selected disabled>--Select Role--</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
-                                @endforeach
-
-                            </select> --}}
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fas fa-minus"></i>
+                            </button>
                         </div>
-                        <div class="col col-md-4"></div>
-                    </div> <br>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <form action="{{ route('AddPermission') }}">
+                        <div class="card-body">
+                            <div class="row text-center">
+                                @foreach ($permissions as $permission)
+                                    <div class="col-md-3 text-left">
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <div class="role-container">
+                                                    <input class="form-check-input permission-checkbox" type="checkbox"
+                                                    {{$role->hasPermissionTo($permission) ? 'checked': ''}}
+                                                        name="{{ $permission->id }}" id="{{ $permission->name }}"
+                                                        value="{{ $permission->id }}">
+                                                    <div class="checkmark"></div>
+                                                    <label class="form-check-label"
+                                                        for="{{ $permission->name }}">{{ $permission->name }}</label>
+                                                </div>
 
-                    {{-- <div class="row text-center">
-                        @foreach ($permissions as $permission)
-                            <div class="col-md-3 text-left">
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <div class="role-container">
-                                            <input class="form-check-input permission-checkbox" type="checkbox"
-                                                name="permission_id" id="{{ $permission->permissions_name }}"
-                                                value="{{ $permission->id }}">
-                                            <div class="checkmark"></div>
-                                            <label class="form-check-label"
-                                                for="{{ $permission->permissions_name }}">{{ $permission->permissions_name }}</label>
+                                            </div>
                                         </div>
-
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div> --}}
+                            <button class="btn btn-success">Submit</button>
+                    </form>
                 </div>
+
                 <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
+
+
         </div>
+        <!-- /.card -->
+        @endforeach
+        </div>
+    </div>
     </section>
     <!-- /.content-header -->
 @endsection

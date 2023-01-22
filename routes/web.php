@@ -18,7 +18,7 @@ Route::group(['middleware' => ['auth_check', 'prevent_back_history']], function(
 Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::get('/', [OchuController::class, 'Test'])->name('home');
     Route::get('/pattientarea', [OchuController::class, 'PattientArea'])->name('pattientarea');
-    Route::get('/pattient', [OchuController::class, 'Pattient'])->name('pattient');
+
 
     //branches routes
     Route::get('/branches', [retrieveDataController::class, 'retrieveData'])->name('branches');
@@ -46,6 +46,10 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::get('/doctor', [retrieveDataController::class, 'ShowDoctorsData'])->name('doctor');
     Route::get('/AddDoctor', [saveDataController::class, 'AddDoctor'])->name('AddDoctor');
 
+    //Pattient Route
+    Route::get('/pattient', [retrieveDataController::class, 'ShowPattientData'])->name('pattient');
+    Route::get('/Addpattient', [saveDataController::class, 'AddPattient'])->name('addpattient');
+
 
     //role and permission routes
     Route::get('/setting', [retrieveDataController::class, 'RolePermission'])->name('setting');
@@ -53,6 +57,11 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     //logout
     Route::get('/auth/logout', [AuthController::class, 'Logout'])->name('auth.logout');
     Route::get('/testing', [OchuController::class, 'testing'])->name('testing');
+
+
+    Route::get('/AddPersmission', [saveDataController::class, 'AddPermission'])->name('AddPermission');
+
+
 
 
 });

@@ -205,7 +205,7 @@
                             <div class="row">
                                 <div class="col col-md-12">
                                     <label for="">Branch Name</label>
-                                    <input type="text" name="branchname" class="form-control" id=""
+                                    <input type="text" name="branch_name" class="form-control" id=""
                                         placeholder="Enter branch name here ...">
                                 </div>
                             </div>
