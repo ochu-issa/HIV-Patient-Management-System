@@ -38,7 +38,6 @@ class AuthController extends Controller
             //make authentication
             if (Auth::attempt(['member_id' => $member_id, 'password' => $request->password]))
             {
-                //$userName = $member->f_name." ".$member->l_name;
                 return redirect()->route('home')->with('success', '[Login Successfully]');
             }
             else

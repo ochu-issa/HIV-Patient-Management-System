@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-//use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class member extends Model
@@ -14,7 +15,7 @@ class member extends Model
     protected $guard_name = 'web';
 
     protected $guarded = [];
-    
+
      public function users()
      {
          return $this->hasMany(User::class);

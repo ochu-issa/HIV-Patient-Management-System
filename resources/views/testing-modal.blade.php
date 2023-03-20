@@ -32,7 +32,7 @@
         </div>
 
     </section>
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             // $(document).on('click', '#fire-modal', function() {
             //     $('#testing-modal').modal('show');
@@ -56,5 +56,5 @@
             });
 
         });
-    </script> --}}
+    </script>
 @endsection

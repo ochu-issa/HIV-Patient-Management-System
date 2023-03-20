@@ -41,17 +41,20 @@
                         <div class="card-header">
                             <h3 class="card-title">Pattient Area</h3>
                         </div> <!-- /.card-body -->
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="text-center col col-md-12">
-                                    <label for="">Enter Pattient Number</label>
-                                    <input type="text" name="pattient_number" class="form-control"
-                                        placeholder="MM/20/0000" id=""> <br>
-                                    <button class="btn btn-block btn-primary"><span class="fa fa-search"></span> Search
-                                        here</button>
+                        <form action="{{route("searchpatient")}}" method="GET">
+                            @csrf
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="text-center col col-md-12">
+                                        <label for="">Enter Pattient Number</label>
+                                        <input type="text" name="pattient_number" class="form-control"
+                                            placeholder="MM/20/0000" id=""> <br>
+                                        <button class="btn btn-block btn-primary"><span class="fa fa-search"></span> Search
+                                            here</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div><!-- /.card-body -->
+                            </div><!-- /.card-body -->
+                        </form>
                     </div>
                 </div>
                 <div class="col col-md-3.5"> </div>

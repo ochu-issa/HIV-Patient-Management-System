@@ -26,4 +26,11 @@ class Branch extends Model
     {
         return $this->hasMany(Doctor::class, 'branch_id');
     }
+
+    //has many Patients
+    public function Pattient()
+    {
+        return $this->hasMany(Pattient::class, 'branch_id');
+    }
+    
 }

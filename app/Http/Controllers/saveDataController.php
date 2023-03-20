@@ -9,8 +9,10 @@ use App\Models\BranchAdmin;
 use App\Models\Receptionist;
 use App\Models\Doctor;
 use App\Models\member;
+use App\Models\PatientDetails;
 use App\Models\Pattient;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
@@ -51,6 +53,7 @@ class saveDataController extends Controller
         $branch->BranchAdmin()->delete();
         $branch->Receptionist()->delete();
         $branch->Doctor()->delete();
+        $branch->Pattient()->delete();
         $branch->delete();
 
         // Redirect to the branches page
@@ -155,19 +158,19 @@ class saveDataController extends Controller
             'phone_number' => 'required|numeric|unique:members',
         ]);
 
-         //select from branch
-         $branchName = $request->branchname;
-         $branch = Branch::where('branch_name', $branchName)->first();
+        //select from branch
+        $branchName = $request->branchname;
+        $branch = Branch::where('branch_name', $branchName)->first();
 
-         //create user and take the id and assign role
-         $member = member::create([
-             'f_name' => $request->f_name,
-             'l_name' => $request->l_name,
-             'gender' => $request->gender,
-             'email' => $request->email,
-             'phone_number' => $request->phone_number,
-             'branch_id' => $branch->id,
-         ])->assignRole('Receptionist');
+        //create user and take the id and assign role
+        $member = member::create([
+            'f_name' => $request->f_name,
+            'l_name' => $request->l_name,
+            'gender' => $request->gender,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'branch_id' => $branch->id,
+        ])->assignRole('Receptionist');
 
         //select role id and insert into User table
         $role_id = Role::where('name', 'Receptionist')->first()->id;
@@ -280,5 +283,67 @@ class saveDataController extends Controller
         $rolename->syncPermissions($permission);
         //dd($permission);
 
+    }
+
+    //Patient Details
+    public function Patient_Details($PatientNumber)
+    {
+        $patientinfo = Pattient::where('pattient_number', $PatientNumber)->first();
+        // Check if $patientinfo is not null before proceeding
+        if ($patientinfo) {
+            $medicsData = PatientDetails::where('patient_id', $patientinfo->id)->get();
+
+            // Add the medicsData to the patientinfo object
+            $patientinfo->medicsData = $medicsData;
+        }
+
+        return $patientinfo;
+
+    }
+
+    //searching for pattient
+    public function SearchPatient(Request $request)
+    {
+        $patientNumber = $request->pattient_number;
+        $select_patient = $this->Patient_Details($patientNumber);
+        if (!$select_patient) {
+            return redirect()->back()->with('error', 'Error: Patient with number ' . $patientNumber . ' does not exist!');
+        } else {
+            $branch = Branch::get();
+            return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch]);
+        }
+    }
+
+    //add patient medical records
+    public function AddMedicalRecord(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'medics_type' => 'required',
+            'hiv_level' => 'required',
+            'medical_description' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', 'Error: Something went wrong!');
+        }
+
+        PatientDetails::create([
+            'patient_id' => $request->patient_id,
+            'branch_id' => $request->branch_id,
+            'doctor_id' => Auth::user()->id,
+            'medics_type' => $request->medics_type,
+            'HIV_level' => $request->hiv_level,
+            'description' => $request->medical_description,
+        ]);
+        $patientNumber = $request->pattient_number;
+        return $this->Patient_information($patientNumber);
+    }
+
+    //get Pattient Data
+    public function Patient_information($patientNumber)
+    {
+        $select_patient = $this->Patient_Details($patientNumber);
+        $branch = Branch::all();
+        return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch])->with('success', 'Medical record added successfully!');
     }
 }

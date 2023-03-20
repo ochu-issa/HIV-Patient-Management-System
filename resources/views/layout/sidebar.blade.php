@@ -4,25 +4,41 @@
       <a href="{{ route('home') }}" class="brand-link">
           <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
               style="opacity: .8">
-          @auth
-              @hasrole('Super-Admin')
+
+          {{-- @auth
+              @if (hasRole('Super-Admin'))
                   <span class="brand-text font-weight-light">HMS-SUPER-ADMIN</span>
+              @elseif(hasRole('Doctor'))
+                  <span class="brand-text font-weight-light">HMS-DOCTOR</span>
+              @elseif(hasRole('Branch-Admin'))
+                  <span class="brand-text font-weight-light">HMS-BRANCH-ADMIN</span>
+              @elseif(hasRole('Receptionist'))
+                  <span class="brand-text font-weight-light">HMS-RECEPTIONIST</span>
               @else
-                  @hasrole('Doctor')
-                      <span class="brand-text font-weight-light">HMS-DOCTOR</span>
-                  @else
-                      @hasrole('Branch-Admin')
-                          <span class="brand-text font-weight-light">HMS-BRANCH-ADMIN</span>
-                      @else
-                          @hasrole('Receptionist')
-                              <span class="brand-text font-weight-light">HMS-RECEPTIONIST</span>
-                          @else
-                              <span class="brand-text font-weight-light">HMS-USER</span>
-                          @endhasrole
-                      @endhasrole
-                  @endhasrole
-              @endhasrole
-          @endauth
+                  <span class="brand-text font-weight-light">HMS-USER</span>
+              @endif
+          @endauth --}}
+          {{--
+          @role('Super-Admin')
+              <span class="brand-text font-weight-light">HMS-SUPER-ADMIN</span>
+              @elserole('Doctor')
+              <span class="brand-text font-weight-light">HMS-DOCTOR</span>
+              @elserole('Branch-Admin')
+              <span class="brand-text font-weight-light">HMS-BRANCH-ADMIN</span>
+              @elserole('Receptionist')
+              <span class="brand-text font-weight-light">HMS-RECEPTIONIST</span>
+          @endrole --}}
+
+          @php
+              $user = auth()->user();
+              $roles = ['Super-Admin', 'Doctor', 'Branch-Admin', 'Receptionist'];
+          @endphp
+
+          @foreach ($roles as $role)
+              @if ($user->hasRole($role))
+                  <span class="brand-text font-weight-light">HMS-{{ strtoupper($role) }}</span>
+              @endif
+          @endforeach
 
 
       </a>
@@ -56,24 +72,26 @@
           <nav class="mt-2">
               <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                   data-accordion="false">
-                  <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
                   <li class="nav-header active">NAVIGATION</li>
 
                   {{-- //psttient area --}}
-                  @can('Access-Pattient')
-                      <li class="nav-item">
-                          <a href="{{ route('pattientarea') }}" class="nav-link">
-                              <i class="nav-icon fas fa-th"></i>
-                              <p>
-                                  Pattients Area
-                                  <span class="right badge badge-danger">New</span>
-                              </p>
-                          </a>
-                      </li>
-                  @endcan
+                  @auth
+                      @can('Access-Pattient')
+                          <li class="nav-item">
+                              <a href="{{ route('pattientarea') }}" class="nav-link">
+                                  <i class="nav-icon fas fa-th"></i>
+                                  <p>
+                                      Pattients Area
+                                      <span class="right badge badge-danger">New</span>
+                                  </p>
+                              </a>
+                          </li>
+                      @endcan
+                  @endauth
+
 
                   @canany(['Create-Branch', 'View-Branch', 'Edit-Branch', 'Delete-Branch'])
+                      {{-- @canany(['Create-Pattient', 'View-Pattient', 'Edit-Pattient', 'Delete-Pattient']) --}}
                       <li class="nav-item">
                           <a href="{{ route('branches') }}" class="nav-link">
                               <i class="nav-icon fas fa-hospital"></i>
@@ -83,7 +101,6 @@
                           </a>
                       </li>
                   @endcanany
-
                   <li class="nav-item menu-close ">
                       <a href="#" class="nav-link">
                           <i class="nav-icon fa fa-users"></i>
@@ -94,7 +111,6 @@
                       </a>
                       <ul class="nav nav-treeview">
                           @canany(['Create-Pattient', 'View-Pattient', 'Edit-Pattient', 'Delete-Pattient'])
-
                               <li class="nav-item">
                                   <a href="{{ route('pattient') }}" class="nav-link">
                                       <i class="nav-icon far fas fa-procedures"></i>

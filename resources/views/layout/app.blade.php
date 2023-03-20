@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-
+    <link rel="stylesheet" href="{{asset('custom-css/custom.min.css')}}">
     <!-- jQuery -->
     <script src="plugins/jquery/jquery.min.js"></script>
 </head>
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-
+    @include('layout/footer')
     <!-- jQuery UI 1.11.4 -->
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
