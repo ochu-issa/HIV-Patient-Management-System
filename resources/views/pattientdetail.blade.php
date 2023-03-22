@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0"><span class="fa fa-procedures"></span> Pattients Details</h1>
+                    <h1 class="m-0"><span class="fa fa-procedures"></span> Patients Details</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -87,174 +87,181 @@
                         </div><!-- /.card-header -->
                         <div class="card-body">
                             <div class="tab-content">
+
                                 <div class="tab-pane" id="activity">
                                     <!-- Post -->
-                                    <div class="post">
-                                        <div class="user-block">
-                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg"
-                                                alt="user image">
-                                            <span class="username">
-                                                <a href="#">Jonathan Burke Jr.</a>
-                                                <a href="#" class="float-right btn-tool"><i
-                                                        class="fas fa-times"></i></a>
-                                            </span>
-                                            <span class="description">Shared publicly - 7:30 PM today</span>
+
+                                    <form class="form-horizontal" action="{{ route('sendmessage') }}" method="post">
+                                        @csrf
+                                        <div class="input-group input-group-sm mb-0">
+                                            <input class="form-control form-control-sm" name="message"
+                                                placeholder="Enter your comment...">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-danger">Send</button>
+                                            </div>
                                         </div>
-                                        <!-- /.user-block -->
-                                        <p>
-                                            Lorem ipsum represents a long-held tradition for designers,
-                                            typographers and the like. Some people hate it and argue for
-                                            its demise, but others ignore the hate as they create awesome
-                                            tools to help create filler text for everyone from bacon lovers
-                                            to Charlie Sheen fans.
-                                        </p>
+                                    </form> <br>
+                                    @foreach ($messages as $message)
+                                        <div class="post">
+                                            <div class="user-block">
+                                                <img class="img-circle img-bordered-sm"
+                                                    src="../../dist/img/user1-128x128.jpg" alt="user image">
+                                                <span class="username">
+                                                    <a href="#">
+                                                        {{ $member->where('id', $message->doctor_id)->first()->f_name }}
+                                                        {{ $member->where('id', $message->doctor_id)->first()->l_name }}.
+                                                    </a>
 
-                                        <p>
-                                            <a href="#" class="link-black text-sm mr-2"><i
-                                                    class="fas fa-share mr-1"></i> Share</a>
-                                            <a href="#" class="link-black text-sm"><i
-                                                    class="far fa-thumbs-up mr-1"></i> Like</a>
-                                            <span class="float-right">
-                                                <a href="#" class="link-black text-sm">
-                                                    <i class="far fa-comments mr-1"></i> Comments (5)
-                                                </a>
-                                            </span>
-                                        </p>
+                                                </span>
+                                                <span class="description">Shared publicly -
+                                                    {{ \Carbon\Carbon::parse($message->created_at)->format('d F Y H:i') }},
+                                                </span>
+                                            </div>
+                                            <!-- /.user-block -->
+                                            <p>
+                                                {{ $message->message }}
+                                            </p>
 
-                                        <input class="form-control form-control-sm" type="text"
-                                            placeholder="Type a comment">
-                                    </div>
-                                    <!-- /.post -->
+                                            <p>
+                                                <a href="#" class="link-black text-sm"><i
+                                                        class="far fa-thumbs-up mr-1"></i> Like</a>
 
-                                    <!-- Post -->
+                                                <span class="float-right">
+                                                    @if ($message->doctor_id == Auth::user()->id)
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                            data-target="#delete-message{{ $message->id }}">Delete</button>
+                                                    @endif
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <!-- /.post -->
+                                        {{-- //delete modal --}}
+                                        <div class="modal fade" id="delete-message{{ $message->id }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content bg-danger">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Delete Response</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to delete Response&hellip;?</p>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <form action="{{route("deletemessage")}}" method="POST">
+                                                            @csrf
+                                                            <button type="button" class="btn btn-outline-light"
+                                                                data-dismiss="modal">Close</button>
+                                                            <input type="hidden" name="messageid"
+                                                                value="{{ $message->id }}" id="">
+                                                            <button type="delete"
+                                                                class="btn btn-outline-light ">Delete</button>
+                                                        </form>
+                                                    </div>
+
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
+
+                                    @endforeach
+                                    <!-- Post line-->
                                     <div class="post clearfix">
-                                        <div class="user-block">
-                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg"
-                                                alt="User Image">
-                                            <span class="username">
-                                                <a href="#">Sarah Ross</a>
-                                                <a href="#" class="float-right btn-tool"><i
-                                                        class="fas fa-times"></i></a>
-                                            </span>
-                                            <span class="description">Sent you a message - 3 days ago</span>
-                                        </div>
-                                        <!-- /.user-block -->
-                                        <p>
-                                            Lorem ipsum represents a long-held tradition for designers,
-                                            typographers and the like. Some people hate it and argue for
-                                            its demise, but others ignore the hate as they create awesome
-                                            tools to help create filler text for everyone from bacon lovers
-                                            to Charlie Sheen fans.
-                                        </p>
-
-                                        <form class="form-horizontal">
-                                            <div class="input-group input-group-sm mb-0">
-                                                <input class="form-control form-control-sm" placeholder="Response">
-                                                <div class="input-group-append">
-                                                    <button type="submit" class="btn btn-danger">Send</button>
-                                                </div>
-                                            </div>
-                                        </form>
                                     </div>
-                                    <!-- /.post -->
 
-                                    <!-- Post -->
-                                    <div class="post">
-                                        <div class="user-block">
-                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg"
-                                                alt="User Image">
-                                            <span class="username">
-                                                <a href="#">Adam Jones</a>
-                                                <a href="#" class="float-right btn-tool"><i
-                                                        class="fas fa-times"></i></a>
-                                            </span>
-                                            <span class="description">Posted 5 photos - 5 days ago</span>
-                                        </div>
-                                        <!-- /.user-block -->
-                                        <div class="row mb-3">
-                                            <div class="col-sm-6">
-                                                <img class="img-fluid" src="../../dist/img/photo1.png" alt="Photo">
-                                            </div>
-                                            <!-- /.col -->
-                                            <div class="col-sm-6">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img class="img-fluid mb-3" src="../../dist/img/photo2.png"
-                                                            alt="Photo">
-                                                        <img class="img-fluid" src="../../dist/img/photo3.jpg"
-                                                            alt="Photo">
-                                                    </div>
-                                                    <!-- /.col -->
-                                                    <div class="col-sm-6">
-                                                        <img class="img-fluid mb-3" src="../../dist/img/photo4.jpg"
-                                                            alt="Photo">
-                                                        <img class="img-fluid" src="../../dist/img/photo1.png"
-                                                            alt="Photo">
-                                                    </div>
-                                                    <!-- /.col -->
-                                                </div>
-                                                <!-- /.row -->
-                                            </div>
-                                            <!-- /.col -->
-                                        </div>
-                                        <!-- /.row -->
-
-                                        <p>
-                                            <a href="#" class="link-black text-sm mr-2"><i
-                                                    class="fas fa-share mr-1"></i> Share</a>
-                                            <a href="#" class="link-black text-sm"><i
-                                                    class="far fa-thumbs-up mr-1"></i> Like</a>
-                                            <span class="float-right">
-                                                <a href="#" class="link-black text-sm">
-                                                    <i class="far fa-comments mr-1"></i> Comments (5)
-                                                </a>
-                                            </span>
-                                        </p>
-
-                                        <input class="form-control form-control-sm" type="text"
-                                            placeholder="Type a comment">
-                                    </div>
-                                    <!-- /.post -->
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="active tab-pane" id="timeline">
                                     <!-- The timeline -->
                                     @foreach ($patientData->medicsData as $medic)
-                                    <div class="timeline timeline-inverse">
-                                        <!-- timeline time label -->
-                                        <div class="time-label">
-                                            <span class="bg-danger">
-                                                {{ \Carbon\Carbon::parse($medic->created_at)->format('d F Y') }}
-                                            </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fa fa-heartbeat bg-primary"></i>
+                                        <div class="timeline timeline-inverse">
+                                            <!-- timeline time label -->
+                                            <div class="time-label">
+                                                <span class="bg-primary">
+                                                    {{ \Carbon\Carbon::parse($medic->created_at)->format('d F Y') }}
+                                                </span>
+                                            </div>
+                                            <!-- /.timeline-label -->
+                                            <!-- timeline item -->
+                                            <div>
+                                                <i class="fa fa-heartbeat bg-primary"></i>
 
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> {{ \Carbon\Carbon::parse($medic->created_at)->format('H:i') }}</span>
+                                                <div class="timeline-item">
 
-                                                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an
-                                                    email</h3>
+                                                    <span class="time"><i class="fa fas fa-location-arrow"
+                                                            aria-hidden="true"></i>
+                                                        {{ $branch->where('id', $medic->branch_id)->first()->branch_name }}
+                                                        <i class="far fa-clock"></i>
+                                                        {{ \Carbon\Carbon::parse($medic->created_at)->format('H:i') }}</span>
 
-                                                <div class="timeline-body">
-                                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                                    quora plaxo ideeli hulu weebly balihoo...
-                                                </div>
-                                                <div class="timeline-footer">
-                                                    <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                                    <h3 class="timeline-header"><a href="#">Dkt,
+                                                            {{ $member->where('id', $medic->doctor_id)->first()->f_name }}
+                                                            {{ $member->where('id', $medic->doctor_id)->first()->l_name }}</a>
+                                                    </h3>
+
+                                                    <div class="timeline-body">
+                                                        <h4 class="card-title text-bold">Medical Type:</h4>
+                                                        <p class="card-text ">{{ $medic->medics_type }}</p>
+                                                        <h4 class="card-title text-bold">HIV Level:</h4>
+                                                        <p class="card-text ">{{ $medic->HIV_level }}</p>
+                                                        <h4 class="card-title text-bold">Description:</h4>
+                                                        <p class="card-text">{{ $medic->description }}</p>
+                                                    </div>
+                                                    <div class="timeline-footer">
+                                                        {{-- <a href="#" class="btn btn-primary btn-sm">Read more</a> --}}
+                                                        @if ($medic->doctor_id == Auth::user()->id)
+                                                            <button type="button" class="btn btn-danger"
+                                                                data-toggle="modal"
+                                                                data-target="#delete-medic{{ $medic->id }}">Delete</button>
+                                                        @endif
+
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <!-- END timeline item -->
+                                            <div>
+                                                <i class="far fa-clock bg-gray"></i>
+                                            </div>
                                         </div>
-                                        <!-- END timeline item -->
-                                        <div>
-                                            <i class="far fa-clock bg-gray"></i>
+
+                                        {{-- //delete modal --}}
+                                        <div class="modal fade" id="delete-medic{{ $medic->id }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content bg-danger">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Delete Medical Record</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to delete the medical record&hellip;?</p>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <form action="{{ route('deletemedicalrecord') }}" method="POST">
+                                                            @csrf
+                                                            <button type="button" class="btn btn-outline-light"
+                                                                data-dismiss="modal">Close</button>
+                                                            <input type="hidden" name="medicid"
+                                                                value="{{ $medic->id }}" id="">
+                                                            <button type="delete"
+                                                                class="btn btn-outline-light ">Delete</button>
+                                                        </form>
+                                                    </div>
+
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
                                         </div>
-                                    </div>
+                                        <!-- /.modal -->
                                     @endforeach
 
                                 </div>
@@ -291,7 +298,7 @@
                                             </div>
                                         </div>
                                         <input type="hidden" value="{{ $patientData->id }}" name="patient_id">
-                                        <input type="hidden" value="{{ $patientData->branch_id }}" name="branch_id">
+                                        {{-- <input type="hidden" value="{{ $patientData->branch_id }}" name="branch_id"> --}}
                                         <input type="hidden" value="{{ $patientData->pattient_number }}"
                                             name="pattient_number">
                                         <div class="form-group row">

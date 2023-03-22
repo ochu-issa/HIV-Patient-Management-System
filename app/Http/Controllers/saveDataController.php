@@ -9,6 +9,7 @@ use App\Models\BranchAdmin;
 use App\Models\Receptionist;
 use App\Models\Doctor;
 use App\Models\member;
+use App\Models\Message;
 use App\Models\PatientDetails;
 use App\Models\Pattient;
 use App\Models\User;
@@ -257,6 +258,9 @@ class saveDataController extends Controller
             $check_pattient_number = Pattient::where('pattient_number', $pattient_number)->first();
         }
         //dd($pattient_number);
+        $id = Auth::user()->member_id;
+        $user_branch_id = member::where('id', $id)->first()->branch_id;
+        //dd($user_branch_id);
         $pattient = new Pattient;
         $pattient->f_name = $request->f_name;
         $pattient->l_name = $request->l_name;
@@ -264,7 +268,7 @@ class saveDataController extends Controller
         $pattient->address = $request->address;
         $pattient->phone_number = $request->phone_number;
         $pattient->pattient_number = $pattient_number;
-        $pattient->branch_id = 1;
+        $pattient->branch_id = $user_branch_id;
         $pattient->save();
         return redirect()->back()->with('success', 'Pattient Addedd successfully!');
     }
@@ -291,14 +295,13 @@ class saveDataController extends Controller
         $patientinfo = Pattient::where('pattient_number', $PatientNumber)->first();
         // Check if $patientinfo is not null before proceeding
         if ($patientinfo) {
-            $medicsData = PatientDetails::where('patient_id', $patientinfo->id)->get();
+            $medicsData = PatientDetails::where('patient_id', $patientinfo->id)->orderBy('created_at', 'Desc')->get();
 
             // Add the medicsData to the patientinfo object
             $patientinfo->medicsData = $medicsData;
         }
 
         return $patientinfo;
-
     }
 
     //searching for pattient
@@ -309,8 +312,10 @@ class saveDataController extends Controller
         if (!$select_patient) {
             return redirect()->back()->with('error', 'Error: Patient with number ' . $patientNumber . ' does not exist!');
         } else {
-            $branch = Branch::get();
-            return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch]);
+            $branch = Branch::all();
+            $member = member::get();
+            $message = Message::orderBy('created_at', 'desc')->get();
+            return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
         }
     }
 
@@ -327,16 +332,19 @@ class saveDataController extends Controller
             return redirect()->back()->with('error', 'Error: Something went wrong!');
         }
 
+        $id = Auth::user()->member_id;
+        $user_branch_id = member::where('id', $id)->first()->branch_id;
         PatientDetails::create([
             'patient_id' => $request->patient_id,
-            'branch_id' => $request->branch_id,
+            'branch_id' => $user_branch_id,
             'doctor_id' => Auth::user()->id,
             'medics_type' => $request->medics_type,
             'HIV_level' => $request->hiv_level,
             'description' => $request->medical_description,
         ]);
         $patientNumber = $request->pattient_number;
-        return $this->Patient_information($patientNumber);
+        return redirect()->back()->with('success', 'Medical record addedd successfully!');
+        // return $this->Patient_information($patientNumber)->with('success', 'Medical record added successfully!');
     }
 
     //get Pattient Data
@@ -344,6 +352,44 @@ class saveDataController extends Controller
     {
         $select_patient = $this->Patient_Details($patientNumber);
         $branch = Branch::all();
-        return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch])->with('success', 'Medical record added successfully!');
+        //return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch]);
+        return redirect()->route('searchpatient')->with(['patientData' => $select_patient, 'branch' => $branch], 'success', 'Medical record added successfully!');
+    }
+
+    //delete medical record
+    public function DeleteMedicalRecord(Request $request)
+    {
+        PatientDetails::where('id', $request->medicid)->delete();
+        return redirect()->back()->with('success', 'Medical record deleted successfully!');
+    }
+
+    //send messages
+    public function SendMessage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'message' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', 'Error: Something went wrong!');
+        }
+
+        $id = Auth::user()->member_id;
+        $user_branch_id = member::where('id', $id)->first()->branch_id;
+
+        Message::create([
+            'doctor_id' => Auth::user()->id,
+            'branch_id' => $user_branch_id,
+            'message' => $request->message,
+        ]);
+
+        return redirect()->back()->with('success', 'Message is addedd successfully!');
+    }
+
+    //delete message
+    public function DeleteMessage(Request $request)
+    {
+        Message::where('id', $request->messageid)->delete();
+        return redirect()->back()->with('success', 'Response deleted successfully!');
     }
 }

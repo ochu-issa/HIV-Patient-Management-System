@@ -53,7 +53,7 @@
                                 <th>Address</th>
                                 <th>Phone Number</th>
                                 <th>Pattent Number</th>
-                                <th>View Process</th>
+                                {{-- <th>View Process</th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -66,7 +66,7 @@
                                     <td>{{ $pattient->address }} </td>
                                     <td>{{ $pattient->phone_number }} </td>
                                     <td>{{ $pattient->pattient_number }}</td>
-                                    <td><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span> view</button>
+                                    {{-- <td><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span> view</button> --}}
                                     </td>
                                     <td>
                                         <button class="btn btn-secondary btn-sm"><span class="fa fa-edit"></span></button>
