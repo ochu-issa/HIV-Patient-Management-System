@@ -4,31 +4,6 @@
       <a href="{{ route('home') }}" class="brand-link">
           <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
               style="opacity: .8">
-
-          {{-- @auth
-              @if (hasRole('Super-Admin'))
-                  <span class="brand-text font-weight-light">HMS-SUPER-ADMIN</span>
-              @elseif(hasRole('Doctor'))
-                  <span class="brand-text font-weight-light">HMS-DOCTOR</span>
-              @elseif(hasRole('Branch-Admin'))
-                  <span class="brand-text font-weight-light">HMS-BRANCH-ADMIN</span>
-              @elseif(hasRole('Receptionist'))
-                  <span class="brand-text font-weight-light">HMS-RECEPTIONIST</span>
-              @else
-                  <span class="brand-text font-weight-light">HMS-USER</span>
-              @endif
-          @endauth --}}
-          {{--
-          @role('Super-Admin')
-              <span class="brand-text font-weight-light">HMS-SUPER-ADMIN</span>
-              @elserole('Doctor')
-              <span class="brand-text font-weight-light">HMS-DOCTOR</span>
-              @elserole('Branch-Admin')
-              <span class="brand-text font-weight-light">HMS-BRANCH-ADMIN</span>
-              @elserole('Receptionist')
-              <span class="brand-text font-weight-light">HMS-RECEPTIONIST</span>
-          @endrole --}}
-
           @php
               $user = auth()->user();
               $roles = ['Super-Admin', 'Doctor', 'Branch-Admin', 'Receptionist'];
@@ -51,7 +26,11 @@
                   <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
               </div>
               <div class="info">
-                  <a href="#" class="d-block"> {{ Auth::user()->member_id }}</a>
+                  <a href="#" class="d-block">
+                      @if (Auth::check())
+                          {{ Auth::user()->member->f_name }} {{ Auth::user()->member->l_name }}
+                      @endif
+                  </a>
               </div>
           </div>
 

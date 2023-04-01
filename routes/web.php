@@ -20,7 +20,7 @@ Route::group(['middleware' => ['auth_check', 'prevent_back_history']], function(
 
 Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::get('/', [OchuController::class, 'Test'])->name('home');
-    Route::get('/pattientarea', [OchuController::class, 'PattientArea'])->name('pattientarea');
+
 
     //branches routes
     Route::get('/branches', [retrieveDataController::class, 'retrieveData'])->name('branches');
@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::get('/pattient', [retrieveDataController::class, 'ShowPattientData'])->name('pattient');
     Route::get('/Addpattient', [saveDataController::class, 'AddPattient'])->name('addpattient');
     Route::get('/pattientdetails', [retrieveDataController::class, 'PattientDetails'])->name('pattientdetails');
+    Route::get('/pattientarea', [retrieveDataController::class, 'PattientArea'])->name('pattientarea');
 
     //Patient details Route
     Route::get('/SearchPatient', [saveDataController::class, 'SearchPatient'])->name('searchpatient');

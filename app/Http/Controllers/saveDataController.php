@@ -134,7 +134,7 @@ class saveDataController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'branch_id' => $branch->id,
-        ])->assignRole('Branch-Admin');
+        ]);
 
         //select role id and insert into User table
         $role_id = Role::where('name', 'Branch-Admin')->first()->id;
@@ -142,7 +142,7 @@ class saveDataController extends Controller
             'member_id' => $member->id,
             'role_id' => $role_id,
             'password' => Hash::make('password'),
-        ]);
+        ])->assignRole('Branch-Admin');
 
         return redirect()->route('branchadmin')->with('success', 'Branch Admin Addedd successfully!');
     }
@@ -171,7 +171,7 @@ class saveDataController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'branch_id' => $branch->id,
-        ])->assignRole('Receptionist');
+        ]);
 
         //select role id and insert into User table
         $role_id = Role::where('name', 'Receptionist')->first()->id;
@@ -179,7 +179,7 @@ class saveDataController extends Controller
             'member_id' => $member->id,
             'role_id' => $role_id,
             'password' => Hash::make('password'),
-        ]);
+        ])->assignRole('Receptionist');
 
         return redirect()->route('receptionist')->with('success', 'Receptionist Addedd successfully!');
     }
@@ -211,7 +211,7 @@ class saveDataController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'branch_id' => $branch->id,
-        ])->assignRole('Doctor');
+        ]);
 
         //select role id and insert into User table
         $role_id = Role::where('name', 'Doctor')->first()->id;
@@ -219,7 +219,7 @@ class saveDataController extends Controller
             'member_id' => $member->id,
             'role_id' => $role_id,
             'password' => Hash::make('password'),
-        ]);
+        ])->assignRole('Doctor');
         return redirect()->back()->with('success', 'Doctor Addedd successfully!');
     }
 
