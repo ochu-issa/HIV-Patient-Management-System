@@ -59,13 +59,6 @@
                                     <td>{{$no}}</td>
                                     <td>{{$meter->meter_number}}</td>
                                     <td><span class="badge badge-success">{{$meter->unit}}</span></td>
-                                    {{-- <td>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button class="btn btn-sm btn-success">active</button>
-                                            <button class="btn btn-sm btn-danger"><span class="fa fa-trash"></span></button>
-                                        </div>
-                                    </td> --}}
-                                    {{-- <td>Ansi Space</td> --}}
                                 </tr>
                                 @php
                                     $no++;

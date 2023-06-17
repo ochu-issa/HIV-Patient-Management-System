@@ -23,7 +23,7 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
               <div class="image">
-                  <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                  <img src="dist/img/profile-1.png" class="img-circle elevation-2" alt="User Image">
               </div>
               <div class="info">
                   <a href="#" class="d-block">
@@ -54,6 +54,19 @@
                   <li class="nav-header active">NAVIGATION</li>
 
                   {{-- //psttient area --}}
+                  @if(Auth::user()->hasRole('Super-Admin'))
+
+                          <li class="nav-item">
+                              <a href="{{ route('home') }}" class="nav-link">
+                                  <i class="nav-icon fa fa-dashboard"></i>
+                                  <p>
+                                      Dashboard
+                                      {{-- <span class="right badge badge-danger">New</span> --}}
+                                  </p>
+                              </a>
+                          </li>
+
+                  @endif
                   @auth
                       @can('Access-Pattient')
                           <li class="nav-item">
@@ -61,7 +74,7 @@
                                   <i class="nav-icon fas fa-th"></i>
                                   <p>
                                       Pattients Area
-                                      <span class="right badge badge-danger">New</span>
+                                      {{-- <span class="right badge badge-danger">New</span> --}}
                                   </p>
                               </a>
                           </li>
@@ -128,26 +141,29 @@
                           @endcanany
                       </ul>
                   </li>
-
-                  @can('Setting')
-                      <li class="nav-item">
-                          <a href="{{ route('setting') }}" class="nav-link">
-                              <i class="nav-icon fas fa-cog"></i>
-                              <p>
-                                  Settings
-                              </p>
-                          </a>
-                      </li>
-                  @endcan
-
                   <li class="nav-item">
-                      <a href="{{ route('testing') }}" class="nav-link">
-                          <i class="nav-icon fas fa-hospital"></i>
-                          <p>
-                              Testing
-                          </p>
-                      </a>
-                  </li>
+                    <a href="{{ route('profile') }}" class="nav-link">
+                        <i class="nav-icon fas fa-address-book"></i>
+                        <p>
+                            Profile
+                        </p>
+                    </a>
+                </li>
+
+                  @if (Auth::user()->hasRole('Super-Admin'))
+                      @can('Setting')
+                          <li class="nav-item">
+                              <a href="{{ route('setting') }}" class="nav-link">
+                                  <i class="nav-icon fas fa-cog"></i>
+                                  <p>
+                                      Settings
+                                  </p>
+                              </a>
+                          </li>
+                      @endcan
+                  @endif
+
+
 
               </ul>
           </nav>

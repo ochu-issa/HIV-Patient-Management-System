@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
-
+use PDF;
+use Illuminate\Support\Facades\File;
+//use Barryvdh\DomPDF\PDF;
 
 class saveDataController extends Controller
 {
@@ -307,6 +309,7 @@ class saveDataController extends Controller
     //searching for pattient
     public function SearchPatient(Request $request)
     {
+
         $patientNumber = $request->pattient_number;
         $select_patient = $this->Patient_Details($patientNumber);
         if (!$select_patient) {
@@ -352,6 +355,7 @@ class saveDataController extends Controller
     {
         $select_patient = $this->Patient_Details($patientNumber);
         $branch = Branch::all();
+        //dd('test');
         //return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch]);
         return redirect()->route('searchpatient')->with(['patientData' => $select_patient, 'branch' => $branch], 'success', 'Medical record added successfully!');
     }
@@ -391,5 +395,27 @@ class saveDataController extends Controller
     {
         Message::where('id', $request->messageid)->delete();
         return redirect()->back()->with('success', 'Response deleted successfully!');
+    }
+
+    //generate report function
+    public function generateReport(Request $request)
+    {
+        $patientNumber = $request->patientNumber;
+        $select_patient = $this->Patient_Details($patientNumber);
+        if (!$select_patient) {
+            return redirect()->back()->with('error', 'Error: We could not print patient information');
+        } else {
+            $branch = Branch::get();
+            $member = member::get();
+            $message = Message::orderBy('created_at', 'desc')->get();
+
+            // return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
+            $firstName = member::where('id', Auth::user()->member_id)->first()->f_name;
+            $lastName = member::where('id', Auth::user()->member_id)->first()->l_name;
+            $fullName = $firstName.' '.$lastName;
+            $pdf = PDF::loadView('patientReport',  ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'fullName' => $fullName]);
+
+            return $pdf->download('Patient-'.$patientNumber.'.pdf');
+        }
     }
 }

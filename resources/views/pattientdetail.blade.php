@@ -42,7 +42,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg"
+                                <img class="profile-user-img img-fluid img-circle" src="../../dist/img/profile-1.png"
                                     alt="User profile picture">
                             </div>
 
@@ -82,9 +82,17 @@
                                 <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Add Medics</a>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" href="#activity" data-toggle="tab">Chat Room</a>
+
                                 </li>
+                                <form action="{{route('generatereport')}}" method="POST">
+                                    @csrf
+                                <input type="hidden" name="patientNumber" value="{{ $patientData->pattient_number }}" id="">
+                                <button type="submit" class="btn btn-success float-right"><span class="fa fa-download"></span> Generate Patient Report</button>
+                            </form>
                             </ul>
+
                         </div><!-- /.card-header -->
+
                         <div class="card-body">
                             <div class="tab-content">
 
@@ -127,7 +135,7 @@
                                                         class="far fa-thumbs-up mr-1"></i> Like</a>
 
                                                 <span class="float-right">
-                                                    @if ($message->doctor_id == Auth::user()->id)
+                                                    @if ($message->doctor_id == Auth::user()->id OR Auth::user()->hasRole('Super-Admin'))
                                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                             data-target="#delete-message{{ $message->id }}">Delete</button>
                                                     @endif
@@ -214,7 +222,7 @@
                                                     </div>
                                                     <div class="timeline-footer">
                                                         {{-- <a href="#" class="btn btn-primary btn-sm">Read more</a> --}}
-                                                        @if ($medic->doctor_id == Auth::user()->id)
+                                                        @if ($medic->doctor_id == Auth::user()->id OR Auth::user()->hasRole('Super-Admin') )
                                                             <button type="button" class="btn btn-danger"
                                                                 data-toggle="modal"
                                                                 data-target="#delete-medic{{ $medic->id }}">Delete</button>
@@ -284,7 +292,7 @@
                                                     <option selected disabled required>--select HIV level</option>
                                                     <option value="Level 1">Level 1</option>
                                                     <option value="Level 2">Level 2</option>
-                                                    <option value="Level 3">Level 2</option>
+                                                    <option value="Level 3">Level 3</option>
                                                     <option value="Level 4">Level 4</option>
                                                 </select>
                                             </div>

@@ -54,7 +54,10 @@
                                 <th>Phone Number</th>
                                 <th>Pattent Number</th>
                                 {{-- <th>View Process</th> --}}
+                                @if (!Auth::user()->hasRole('Receptionist'))
                                 <th>Action</th>
+                                @endif
+
                             </tr>
                         </thead>
                         <tbody>
@@ -68,10 +71,12 @@
                                     <td>{{ $pattient->pattient_number }}</td>
                                     {{-- <td><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span> view</button> --}}
                                     </td>
+                                    @if (!Auth::user()->hasRole('Receptionist'))
                                     <td>
                                         <button class="btn btn-secondary btn-sm"><span class="fa fa-edit"></span></button>
                                         <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
                                     </td>
+                                    @endif
                                 </tr>
                                 @php
                                     $no++;

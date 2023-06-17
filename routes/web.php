@@ -73,6 +73,10 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::post('/DeleteMedicalRecord', [saveDataController::class, 'DeleteMedicalRecord'])->name('deletemedicalrecord');
     Route::post('/SendMessage', [saveDataController::class, 'SendMessage'])->name('sendmessage');
     Route::post('/DeleteMessage', [saveDataController::class, 'DeleteMessage'])->name('deletemessage');
+    Route::post('/generateReport', [saveDataController::class, 'generateReport'])->name('generatereport');
+
+    //details profile
+    Route::get('/profile', [retrieveDataController::class, 'profileDetails'])->name('profile');
 
 
 

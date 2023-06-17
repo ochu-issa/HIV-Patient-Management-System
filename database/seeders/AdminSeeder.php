@@ -30,11 +30,11 @@ class AdminSeeder extends Seeder
         //Create first user
         member::create([
             'id' => 1,
-            'f_name' => 'Othman',
-            'l_name' => 'Issa',
-            'email' => 'ochu@gmail.com',
-            'gender' => 'Male',
-            'phone_number' => '255652762026',
+            'f_name' => 'Atuganile',
+            'l_name' => 'Mwaijala',
+            'email' => 'atu@gmail.com',
+            'gender' => 'Female',
+            'phone_number' => '255674478982',
             'branch_id' => 1,
         ]);
 

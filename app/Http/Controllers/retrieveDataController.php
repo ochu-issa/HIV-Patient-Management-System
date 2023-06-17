@@ -127,7 +127,8 @@ class retrieveDataController extends Controller
         } elseif (Auth::user()->hasRole(Role::findByName('Branch-Admin')) || Auth::user()->hasRole(Role::findByName('Doctor'))) {
             $pattients = Pattient::where('branch_id', $auth_user_branch_id)->orderByDesc('id')->get();
         }elseif(Auth::user()->hasRole(Role::findByName('Receptionist'))){
-            $pattients = Pattient::where('branch_id', $auth_user_branch_id)->orderByDesc('id')->get();
+            //$pattients = Pattient::where('branch_id', $auth_user_branch_id)->orderByDesc('id')->get();
+            $pattients = Pattient::orderByDesc('id')->get();
 
         }
         else {
@@ -181,6 +182,15 @@ class retrieveDataController extends Controller
         } else {
             return redirect()->back()->with('error', 'Error: Patient with number ' . $patient_data . ' does not exist!');
         }
+    }
+
+    //profile Details
+    public function profileDetails()
+    {
+        $user = Member::where('id', Auth::user()->member_id)->first();
+
+        return view('profile', ['user' => $user]);
+
     }
 
     // //UnAuthorized Access

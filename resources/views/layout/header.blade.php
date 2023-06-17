@@ -16,7 +16,7 @@
                 <span class="fas fa-caret-down"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-                <a href="#" class="dropdown-item">
+                {{-- <a href="#" class="dropdown-item">
                     <div class="media">
                         <div class="media-body">
                             <h3 class="dropdown-item-title">
@@ -26,7 +26,7 @@
                             <p class="text-sm text-muted"><i class="fas fa-key green"></i> Change Password</p>
                         </div>
                     </div>
-                </a>
+                </a> --}}
                 <div class="dropdown-divider"></div>
                 <a href="{{route('auth.logout')}}" class="dropdown-item" role="button">
                     <div class="media">

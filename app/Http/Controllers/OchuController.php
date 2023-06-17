@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Models\Branch;
+use App\Models\Pattient;
 
 class OchuController extends Controller
 {
     public function Test()
     {
-        return view('home');
+        $branch = Branch::get()->count();
+        $patient = Pattient::get()->count();
+        $doctor = User::role('Doctor')->count();
+        return view('home', ['branch' => $branch, 'patient' => $patient, 'doctor' => $doctor]);
     }
 
     //Pattient Controller

@@ -10,6 +10,7 @@ use Auth;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class AuthController extends Controller
 {
@@ -31,17 +32,12 @@ class AuthController extends Controller
         //dd($member)
         if (!$member) {
             return redirect()->back()->with('error', '[Invalid Crediantials]');
-        }
-        else
-        {
+        } else {
             $member_id = $member->id;
             //make authentication
-            if (Auth::attempt(['member_id' => $member_id, 'password' => $request->password]))
-            {
+            if (Auth::attempt(['member_id' => $member_id, 'password' => $request->password])) {
                 return redirect()->route('home')->with('success', '[Login Successfully]');
-            }
-            else
-            {
+            } else {
                 return redirect()->back()->with('error', '[Invalid Crediantials]');
             }
         }
