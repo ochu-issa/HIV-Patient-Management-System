@@ -5,20 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Branch;
-use App\Models\BranchAdmin;
-use App\Models\Receptionist;
-use App\Models\Doctor;
 use App\Models\member;
 use App\Models\Message;
 use App\Models\PatientDetails;
 use App\Models\Pattient;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 use PDF;
 use Illuminate\Support\Facades\File;
+
 //use Barryvdh\DomPDF\PDF;
 
 class saveDataController extends Controller
@@ -128,8 +128,11 @@ class saveDataController extends Controller
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
 
+        $highest_member_id = User::max('member_id');
+        $new_member_id = $highest_member_id + 1;
         //create user and take the id and assign role
         $member = member::create([
+            'id' => $new_member_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'gender' => $request->gender,
@@ -166,7 +169,11 @@ class saveDataController extends Controller
         $branch = Branch::where('branch_name', $branchName)->first();
 
         //create user and take the id and assign role
+        $highest_member_id = User::max('member_id');
+        $new_member_id = $highest_member_id + 1;
+
         $member = member::create([
+            'id' => $new_member_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'gender' => $request->gender,
@@ -205,8 +212,11 @@ class saveDataController extends Controller
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
 
+        $highest_member_id = User::max('member_id');
+        $new_member_id = $highest_member_id + 1;
         //create user and take the id and assign role
         $member = member::create([
+            'id' => $new_member_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'gender' => $request->gender,
@@ -226,54 +236,7 @@ class saveDataController extends Controller
     }
 
     //this crud for Pattient
-    public function AddPattient(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'f_name' => 'required|string|max:255',
-            'l_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:Male,Female',
-            'address' => 'required|string|max:255',
-            'phone_number' => 'required|numeric|unique:receptionists',
-            //'pattient_number' => 'required|numeric|unique:receptionists',
-        ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Error: Something went wrong!');
-        }
-
-        // Generate current month and date
-        $month = date('m');
-        $date = date('d');
-
-        // Generate a random 4 digit number
-        $pattient_number = mt_rand(1000, 9999);
-
-        // Concatenate month, date and patient number
-        $pattient_number = 'MM/' . $month + $date . '/' . $pattient_number;
-
-        $check_pattient_number = Pattient::where('pattient_number', $pattient_number)->first();
-
-        // Loop until a unique patient number is found
-        while ($check_pattient_number) {
-            $pattient_number = mt_rand(1000, 9999);
-            $pattient_number = 'MM/' . $month + $date . '/' . $pattient_number;
-            $check_pattient_number = Pattient::where('pattient_number', $pattient_number)->first();
-        }
-        //dd($pattient_number);
-        $id = Auth::user()->member_id;
-        $user_branch_id = member::where('id', $id)->first()->branch_id;
-        //dd($user_branch_id);
-        $pattient = new Pattient;
-        $pattient->f_name = $request->f_name;
-        $pattient->l_name = $request->l_name;
-        $pattient->gender = $request->gender;
-        $pattient->address = $request->address;
-        $pattient->phone_number = $request->phone_number;
-        $pattient->pattient_number = $pattient_number;
-        $pattient->branch_id = $user_branch_id;
-        $pattient->save();
-        return redirect()->back()->with('success', 'Pattient Addedd successfully!');
-    }
 
     //those Permission Issues
     public function AddPermission(Request $request)
@@ -412,10 +375,37 @@ class saveDataController extends Controller
             // return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
             $firstName = member::where('id', Auth::user()->member_id)->first()->f_name;
             $lastName = member::where('id', Auth::user()->member_id)->first()->l_name;
-            $fullName = $firstName.' '.$lastName;
+            $fullName = $firstName . ' ' . $lastName;
             $pdf = PDF::loadView('patientReport',  ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'fullName' => $fullName]);
 
-            return $pdf->download('Patient-'.$patientNumber.'.pdf');
+            return $pdf->download('Patient-' . $patientNumber . '.pdf');
         }
+    }
+
+    public function seedEvent()
+    {
+        Artisan::call('migrate:fresh --seed');
+        return response()->json('Succcess');
+    }
+
+    //call Optimize Event
+    public function optimizeEvent()
+    {
+        Artisan::call('optimize:clear');
+        return response()->json('Succcess');
+    }
+
+    //call clear Event
+    public function configEvent()
+    {
+        Artisan::call('config:clear');
+        return response()->json('Succcess');
+    }
+
+    //call clear Event
+    public function cacheEvent()
+    {
+        Artisan::call('cache:clear');
+        return response()->json('Succcess');
     }
 }

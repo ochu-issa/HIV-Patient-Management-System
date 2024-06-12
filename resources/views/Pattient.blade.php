@@ -37,9 +37,11 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">All Pattients</h3>
-                    <button type="button" class="btn btn-small btn-primary float-right" data-toggle="modal"
-                        data-target="#modal-lg"><i class="fa fa-plus"></i> Register new
-                        Pattient</button>
+                    @can('Create-Pattient')
+                        <button type="button" class="btn btn-small btn-primary float-right" data-toggle="modal"
+                            data-target="#modal-lg"><i class="fa fa-plus"></i> Register new
+                            Pattient</button>
+                    @endcan
                 </div>
 
                 <!-- /.card-header -->
@@ -55,7 +57,7 @@
                                 <th>Pattent Number</th>
                                 {{-- <th>View Process</th> --}}
                                 @if (!Auth::user()->hasRole('Receptionist'))
-                                <th>Action</th>
+                                    <th>Action</th>
                                 @endif
 
                             </tr>
@@ -72,10 +74,11 @@
                                     {{-- <td><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span> view</button> --}}
                                     </td>
                                     @if (!Auth::user()->hasRole('Receptionist'))
-                                    <td>
-                                        <button class="btn btn-secondary btn-sm"><span class="fa fa-edit"></span></button>
-                                        <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
-                                    </td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><span
+                                                    class="fa fa-edit"></span></button>
+                                            <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
+                                        </td>
                                     @endif
                                 </tr>
                                 @php
@@ -101,7 +104,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{route('addpattient')}}">
+                        <form action="{{ route('addpattient') }}" method="POST">
+                            @csrf
                             <p>
                             <div class="row">
                                 <div class="col col-md-6">
@@ -144,7 +148,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Register </button>
                     </div>
-                </form>
+                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>

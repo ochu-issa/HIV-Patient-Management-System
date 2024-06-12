@@ -25,13 +25,17 @@ class User extends Authenticatable
     //     'password',
     // ];
 
-    protected $guarded = [];
+    protected $fillable = ['member_id', 'role_id', 'username', 'password'];
 
     public function member()
     {
-        return $this->belongsTo(Member::class);
+        return $this->belongsTo(member::class);
     }
 
+    public function pattient()
+    {
+        return $this->belongsTo(Pattient::class, 'member_id', 'id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -5,6 +5,7 @@ use App\Http\Controllers\OchuController;
 use App\Http\Controllers\saveDataController;
 use App\Http\Controllers\retrieveDataController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PatientController;
 use App\Models\User;
 use GuzzleHttp\Psr7\Request;
 use Spatie\Permission\Models\Permission;
@@ -62,9 +63,10 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
 
     //Pattient Route
     Route::get('/pattient', [retrieveDataController::class, 'ShowPattientData'])->name('pattient');
-    Route::get('/Addpattient', [saveDataController::class, 'AddPattient'])->name('addpattient');
     Route::get('/pattientdetails', [retrieveDataController::class, 'PattientDetails'])->name('pattientdetails');
     Route::get('/pattientarea', [retrieveDataController::class, 'PattientArea'])->name('pattientarea');
+
+    Route::post('/Addpattient', [PatientController::class, 'store'])->name('addpattient');
 
     //Patient details Route
     Route::get('/SearchPatient', [saveDataController::class, 'SearchPatient'])->name('searchpatient');
@@ -91,6 +93,13 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::get('/AddPersmission', [saveDataController::class, 'AddPermission'])->name('AddPermission');
 
 });
+
+
+//call event
+Route::get('/seed-event', [SaveDataController::class, 'seedEvent']);
+Route::get('/optimize-event', [SaveDataController::class, 'optimizeEvent']);
+Route::get('/cache-event', [SaveDataController::class, 'cacheEvent']);
+Route::get('/config-event', [SaveDataController::class, 'configEvent']);
 
 
 
