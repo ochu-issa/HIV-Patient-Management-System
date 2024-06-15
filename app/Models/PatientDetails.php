@@ -16,4 +16,9 @@ class PatientDetails extends Model
     {
         return $this->belongsTo(Pattient::class, 'patient_id');
     }
+
+    public function patientDetailItem()
+    {
+        return $this->hasOne(PatientDetailItem::class);
+    }
 }

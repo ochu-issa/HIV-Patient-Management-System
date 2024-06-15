@@ -127,7 +127,6 @@ class retrieveDataController extends Controller
         } elseif (Auth::user()->hasRole(Role::findByName('Branch-Admin')) || Auth::user()->hasRole(Role::findByName('Doctor'))) {
             $pattients = Pattient::where('branch_id', $auth_user_branch_id)->orderByDesc('id')->get();
         }elseif(Auth::user()->hasRole(Role::findByName('Receptionist'))){
-            //$pattients = Pattient::where('branch_id', $auth_user_branch_id)->orderByDesc('id')->get();
             $pattients = Pattient::orderByDesc('id')->get();
 
         }

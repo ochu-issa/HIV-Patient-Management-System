@@ -60,6 +60,7 @@ class PatientController extends Controller
                 'f_name' => $request->f_name,
                 'l_name' => $request->l_name,
                 'gender' => $request->gender,
+                'dob' => $request->dob,
                 'address' => $request->address,
                 'phone_number' => $request->phone_number,
                 'pattient_number' => $pattient_number,

@@ -9,7 +9,7 @@ class Pattient extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['f_name', 'l_name', 'gender', 'address', 'phone_number', 'pattient_number', 'branch_id', 'status'];
+    protected $fillable = ['f_name', 'l_name', 'gender', 'address','age', 'dob', 'phone_number', 'pattient_number', 'branch_id', 'status'];
 
     //belng to branch
     public function Branch()

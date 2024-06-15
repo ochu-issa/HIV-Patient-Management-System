@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
 
     //Patient details Route
     Route::get('/SearchPatient', [saveDataController::class, 'SearchPatient'])->name('searchpatient');
-    Route::get('/AddPatientRecord', [saveDataController::class, 'AddMedicalRecord'])->name('addpatientrecord');
+    Route::post('/AddPatientRecord', [saveDataController::class, 'AddMedicalRecord'])->name('addpatientrecord');
     Route::get('/PatientInformation', [saveDataController::class, 'Patient_information'])->name('patientinformation');
     Route::post('/DeleteMedicalRecord', [saveDataController::class, 'DeleteMedicalRecord'])->name('deletemedicalrecord');
     Route::post('/SendMessage', [saveDataController::class, 'SendMessage'])->name('sendmessage');
