@@ -261,7 +261,7 @@ class saveDataController extends Controller
         $patientinfo = Pattient::where('pattient_number', $PatientNumber)->first();
         // Check if $patientinfo is not null before proceeding
         if ($patientinfo) {
-            $medicsData = PatientDetails::join('patient_detail_items', 'patient_detail_items.patient_detail_id', '=', 'patient_details.id')
+            $medicsData = PatientDetails::join('patient_detail_items', 'patient_detail_items.patient_details_id', '=', 'patient_details.id')
                 ->where('patient_id', $patientinfo->id)
                 ->select(
                     'patient_details.*',
@@ -272,6 +272,8 @@ class saveDataController extends Controller
 
             $patientinfo->medicsData = $medicsData;
         }
+
+
 
         return $patientinfo;
     }
@@ -285,6 +287,13 @@ class saveDataController extends Controller
         if (!$select_patient) {
             return redirect()->back()->with('error', 'Error: Patient with number ' . $request->pattient_number . ' does not exist!');
         }
+
+
+        $data = [
+            'patient' => $select_patient
+        ];
+
+        // return view('check_patient_exist')->with($data);
 
         $branch = Branch::all();
         $member = member::get();
@@ -327,7 +336,7 @@ class saveDataController extends Controller
             ]);
 
             PatientDetailItem::create([
-                'patient_detail_id' => $patient_detail->id,
+                'patient_details_id' => $patient_detail->id,
                 'viral_load' => $request->viral_load,
                 'cd4_count' => $request->cd4_count,
                 'allergies' => $request->allergies,

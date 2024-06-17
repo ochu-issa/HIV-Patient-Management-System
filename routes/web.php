@@ -6,6 +6,7 @@ use App\Http\Controllers\saveDataController;
 use App\Http\Controllers\retrieveDataController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PatientSessionController;
 use App\Models\User;
 use GuzzleHttp\Psr7\Request;
 use Spatie\Permission\Models\Permission;
@@ -38,20 +39,11 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::get('/testing-response/{id}', [OchuController::class, 'responseCheck'])->name('testing-response');
     //end of branch route
 
-    //Branch Admin routes
-    //$this->middleware(['role_or_permission:Create-Branch-Admin, View-Branch-Admin, Edit-Branch-Admin, Delete-Branch-Admin']);
-    // /**  @var \App\Models\MyUserModel $user **/
-    //$user = User::find(auth()->user());
-    // if(!$user->hasAnyPermission(['Create-Branch-Admin, View-Branch-Admin, Edit-Branch-Admin, Delete-Branch-Admin']))
-    // {
-    // abort(404);
-    // }
-    // else
-    // {
+
     Route::get('/branchadmin', [retrieveDataController::class, 'ShowBranchAdminData'])->name('branchadmin');
     Route::get('/Addbranchadmin', [saveDataController::class, 'AddBranchAdmin'])->name('addbranchadmin');
     //End Branch Admin routes
-   // }
+
 
     //Receptionist routes
     Route::get('/receptionist', [retrieveDataController::class, 'ShowReceptionistData'])->name('receptionist');
@@ -76,6 +68,7 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::post('/SendMessage', [saveDataController::class, 'SendMessage'])->name('sendmessage');
     Route::post('/DeleteMessage', [saveDataController::class, 'DeleteMessage'])->name('deletemessage');
     Route::post('/generateReport', [saveDataController::class, 'generateReport'])->name('generatereport');
+
 
     //details profile
     Route::get('/profile', [retrieveDataController::class, 'profileDetails'])->name('profile');

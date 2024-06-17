@@ -121,8 +121,8 @@
                                                     src="../../dist/img/user1-128x128.jpg" alt="user image">
                                                 <span class="username">
                                                     <a href="#">
-                                                        {{ $member->where('id', $message->doctor_id)->first()->f_name }}
-                                                        {{ $member->where('id', $message->doctor_id)->first()->l_name }}.
+                                                        {{ $message->user->member->f_name }}
+                                                        {{ $message->user->member->l_name }}.
                                                     </a>
 
                                                 </span>
@@ -213,8 +213,8 @@
                                                         {{ \Carbon\Carbon::parse($medic->created_at)->format('H:i') }}</span>
 
                                                     <h3 class="timeline-header"><a href="#">Dkt,
-                                                            {{ $member->where('id', $medic->doctor_id)->first()->f_name }}
-                                                            {{ $member->where('id', $medic->doctor_id)->first()->l_name }}</a>
+                                                            {{ $medic->doctor->member->f_name}} 
+                                                            {{ $medic->doctor->member->l_name }}</a>
                                                     </h3>
 
                                                     <div class="container">
