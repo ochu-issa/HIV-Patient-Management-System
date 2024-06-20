@@ -68,17 +68,18 @@ class PatientController extends Controller
                 'status' => 1,
             ]);
 
-            $randon_password = Str::random(12);
+            $random_password = Str::random(6);
             $user = User::create([
                 'member_id' => $pattient->id,
                 'role_id' => null,
                 'username' => $pattient_number,
-                'password' => Hash::make('password')
+                'password' => Hash::make($random_password)
             ]);
-
+            
             $full_name = $request->f_name . ' ' . $request->l_name;
             $phone_number = $request->phone_number;
-            $this->sendSms($full_name, $phone_number, $user->username, $user->password);
+            $this->sendSms($full_name, $phone_number, $user->username, $random_password);
+
             DB::commit();
 
             return redirect()->back()->with('success', 'Pattient Addedd successfully!');
@@ -90,9 +91,9 @@ class PatientController extends Controller
 
     public function sendSms($full_name, $phone_number, $username, $password)
     {
-        $formatted_date = Carbon::now()->format('d/m/Y h:iA');
-        $api_key = env('BEEM_API_KEY');
-        $secret_key = env('BEEM_SECRET_KEY');
+        $formatted_date = Carbon::now()->format('M d, Y h:iA');
+        $api_key = "024cffc7c9271bf3";
+        $secret_key = "YTVmYzkzYzlkNDY4ZTE5MjEzMjhlMDc0YjA1ZmE1NGQyYmM5MjM2MWZiMGU3NDAyOTk4ZGFhYmFkMzliZDRkNA==";
 
         $message = sprintf(
             'Ndugu %s, Akaunti yako imetengenezwa kikamilifu %s. Username: %s, Password: %s. Tafadhali tumia taarifa hizi kwa kuingia kwenye account yako kwenye App yetu. Asante.',
@@ -112,7 +113,7 @@ class PatientController extends Controller
             ]
         );
 
-        $Url = env('BEEM_URL');
+        $Url = "https://apisms.beem.africa/v1/send";
 
         $ch = curl_init($Url);
         error_reporting(E_ALL);
@@ -139,10 +140,10 @@ class PatientController extends Controller
 
             if ($decodedResponse && isset($decodedResponse['status']) && $decodedResponse['status'] == '01') {
                 Log::info('Message sent successfully');
-                return response("Message sent successfully.");
+                // return response("Message sent successfully.");
             } else {
                 Log::error('Error sending message: ' . $response);
-                return response("Error sending message: " . $response);
+                // return response("Error sending message: " . $response);
             }
         }
     }
