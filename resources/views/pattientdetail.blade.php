@@ -42,8 +42,8 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="../../dist/img/profile-1.png"
-                                    alt="User profile picture">
+                                <img class="profile-user-img img-fluid img-circle"
+                                    src="{{ asset('../../dist/img/profile-1.png') }}" alt="User profile picture">
                             </div>
 
                             <h3 class="profile-username text-center">{{ $patientData->f_name }} {{ $patientData->l_name }}
@@ -56,8 +56,7 @@
                                     <b>Address</b> <a class="float-right">{{ $patientData->address }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Registered At</b> <a
-                                        class="float-right">{{ $branch->where('id', $patientData->branch_id)->first()->branch_name }}</a>
+                                    <b>Registered At</b> <a class="float-right">{{ $patientData->Branch->branch_name }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Patient Number</b> <a class="float-right">{{ $patientData->pattient_number }}</a>
@@ -94,6 +93,12 @@
                                                 class="fa fa-download"></span> Export</button>
                                     </form>
                                 </li>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <li>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                                        data-target="#close-session"><span
+                                            class="fa fa-power-off"></span> Close Session</button>
+                                </li>
                             </ul>
 
                         </div><!-- /.card-header -->
@@ -118,7 +123,7 @@
                                         <div class="post">
                                             <div class="user-block">
                                                 <img class="img-circle img-bordered-sm"
-                                                    src="../../dist/img/user1-128x128.jpg" alt="user image">
+                                                    src="{{ asset('../../dist/img/profile-1.png') }}" alt="user image">
                                                 <span class="username">
                                                     <a href="#">
                                                         {{ $message->user->member->f_name }}
@@ -208,12 +213,12 @@
 
                                                     <span class="time"><i class="fa fas fa-location-arrow"
                                                             aria-hidden="true"></i>
-                                                        {{ $branch->where('id', $medic->branch_id)->first()->branch_name }}
+                                                        {{ $medic->branch->branch_name }}
                                                         <i class="far fa-clock"></i>
                                                         {{ \Carbon\Carbon::parse($medic->created_at)->format('H:i') }}</span>
 
                                                     <h3 class="timeline-header"><a href="#">Dkt,
-                                                            {{ $medic->doctor->member->f_name}} 
+                                                            {{ $medic->doctor->member->f_name }}
                                                             {{ $medic->doctor->member->l_name }}</a>
                                                     </h3>
 
@@ -249,7 +254,9 @@
                                                                     </p>
 
                                                                     <h4 class="card-title text-bold">Diagnosis Date:</h4>
-                                                                    <p class="card-text">{{ $medic->diagnosis_date }}</p>
+                                                                    <p class="card-text">
+                                                                        {{ Carbon\Carbon::parse($medic->diagnosis_date)->format('M d, Y') }}
+                                                                    </p>
 
                                                                     <h4 class="card-title text-bold">Weight:</h4>
                                                                     <p class="card-text">{{ $medic->weight }} kg</p>
@@ -423,6 +430,7 @@
                                         <input type="hidden" value="{{ $patientData->id }}" name="patient_id">
                                         <input type="hidden" value="{{ $patientData->pattient_number }}"
                                             name="pattient_number">
+                                        <input type="hidden" value="{{ $session_id }}" name="session_id">
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
                                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -442,6 +450,35 @@
             </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->
+
+        {{-- close session modal --}}
+        <div class="modal fade" id="close-session">
+            <div class="modal-dialog">
+                <div class="modal-content bg-danger">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Close Session</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to close the session &hellip;?</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <form action="{{ route('patient-sessions.close') }}" method="POST">
+                            @csrf
+                            <button type="button" class="btn btn-outline-light" data-dismiss="modal">No, exist</button>
+                            <input type="hidden" name="session_id" value="{{ $session_id }}" id="">
+                            <button type="delete" class="btn btn-outline-light ">Yes! Close it</button>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     </section>
     <!-- /.content -->
     <!-- /.content -->

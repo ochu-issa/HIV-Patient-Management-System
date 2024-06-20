@@ -13,14 +13,13 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 
-Route::group(['middleware' => ['auth_check', 'prevent_back_history']], function(){
+Route::group(['middleware' => ['auth_check', 'prevent_back_history']], function () {
     Route::get('/login', [AuthController::class, 'Login'])->name('login');
     //login Route
     Route::post('/validate', [AuthController::class, 'authValidate'])->name('validate');
-
 });
 
-Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
+Route::group(['middleware' => ['auth', 'prevent_back_history']], function () {
     Route::get('/', [OchuController::class, 'Test'])->name('home');
 
 
@@ -69,6 +68,15 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
     Route::post('/DeleteMessage', [saveDataController::class, 'DeleteMessage'])->name('deletemessage');
     Route::post('/generateReport', [saveDataController::class, 'generateReport'])->name('generatereport');
 
+    //patient sessions routes
+    Route::group(['prefix' => 'patient-sessions'], function () {
+        Route::get('', [PatientSessionController::class, 'index'])->name('patient-sessions');
+        Route::post('store', [PatientSessionController::class, 'store'])->name('patient-sessions.store');
+        Route::get('show/{id}/{session_id}', [PatientSessionController::class, 'show'])->name('patient-sessions.show');
+        Route::post('close', [PatientSessionController::class, 'closeSession'])->name('patient-sessions.close');
+
+    });
+
 
     //details profile
     Route::get('/profile', [retrieveDataController::class, 'profileDetails'])->name('profile');
@@ -84,7 +92,6 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function(){
 
 
     Route::get('/AddPersmission', [saveDataController::class, 'AddPermission'])->name('AddPermission');
-
 });
 
 
@@ -93,10 +100,3 @@ Route::get('/seed-event', [SaveDataController::class, 'seedEvent']);
 Route::get('/optimize-event', [SaveDataController::class, 'optimizeEvent']);
 Route::get('/cache-event', [SaveDataController::class, 'cacheEvent']);
 Route::get('/config-event', [SaveDataController::class, 'configEvent']);
-
-
-
-
-
-
-

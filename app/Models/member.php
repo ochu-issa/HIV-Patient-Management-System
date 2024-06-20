@@ -20,4 +20,9 @@ class member extends Model
      {
          return $this->hasMany(User::class);
      }
+
+     public function branch()
+     {
+        return $this->belongsTo(Branch::class, 'branch_id');
+     }
 }

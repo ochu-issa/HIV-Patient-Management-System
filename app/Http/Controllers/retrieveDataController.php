@@ -126,11 +126,9 @@ class retrieveDataController extends Controller
             $pattients = Pattient::orderByDesc('id')->get();
         } elseif (Auth::user()->hasRole(Role::findByName('Branch-Admin')) || Auth::user()->hasRole(Role::findByName('Doctor'))) {
             $pattients = Pattient::where('branch_id', $auth_user_branch_id)->orderByDesc('id')->get();
-        }elseif(Auth::user()->hasRole(Role::findByName('Receptionist'))){
+        } elseif (Auth::user()->hasRole(Role::findByName('Receptionist'))) {
             $pattients = Pattient::orderByDesc('id')->get();
-
-        }
-        else {
+        } else {
             return redirect()->back()->with(['error' => 'You are not authorized to perform this action.']);
         }
         $no = 1;
@@ -142,8 +140,12 @@ class retrieveDataController extends Controller
     //Pattient Controller
     public function PattientArea()
     {
-        if (Auth::user()->hasRole('Super-Admin') ||  Auth::user()->hasRole('Branch-Admin') || Auth::user()->hasRole('Doctor')) {
-            return view('PattientArea');
+        if (Auth::user()->hasRole('Super-Admin') ||  Auth::user()->hasRole('Branch-Admin') || Auth::user()->hasRole('Receptionist')) {
+
+            $data = [
+                'patients' => Pattient::select('id', 'pattient_number')->get(),
+            ];
+            return view('PattientArea')->with($data);
         } else {
             return redirect()->back()->with(['error' => 'You are not authorized to perform this action.']);
         }
@@ -189,7 +191,6 @@ class retrieveDataController extends Controller
         $user = Member::where('id', Auth::user()->member_id)->first();
 
         return view('profile', ['user' => $user]);
-
     }
 
     // //UnAuthorized Access

@@ -7,15 +7,20 @@ use App\Models\Doctor;
 use App\Models\User;
 use App\Models\Branch;
 use App\Models\Pattient;
+use Illuminate\Support\Facades\Auth;
 
 class OchuController extends Controller
 {
     public function Test()
     {
-        $branch = Branch::get()->count();
-        $patient = Pattient::get()->count();
-        $doctor = User::role('Doctor')->count();
-        return view('home', ['branch' => $branch, 'patient' => $patient, 'doctor' => $doctor]);
+        $data = [
+            'branch' => Branch::get()->count(),
+            'patient' => Pattient::get()->count(),
+            'doctor' => User::role('Doctor')->count(),
+            'patient_sessions' => Auth::user()->active_sessions,
+            'branch_name' => Auth::user()->branch_name,
+        ];
+        return view('home')->with($data);
     }
 
     //Pattient Controller
@@ -69,6 +74,4 @@ class OchuController extends Controller
             "id" => $branch->id,
         ]);
     }
-
 }
-

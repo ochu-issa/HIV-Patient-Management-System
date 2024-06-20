@@ -272,9 +272,6 @@ class saveDataController extends Controller
 
             $patientinfo->medicsData = $medicsData;
         }
-
-
-
         return $patientinfo;
     }
 
@@ -288,17 +285,16 @@ class saveDataController extends Controller
             return redirect()->back()->with('error', 'Error: Patient with number ' . $request->pattient_number . ' does not exist!');
         }
 
-
         $data = [
             'patient' => $select_patient
         ];
 
-        // return view('check_patient_exist')->with($data);
+        return view('check_patient_exist')->with($data);
 
-        $branch = Branch::all();
-        $member = member::get();
-        $message = Message::orderBy('created_at', 'desc')->get();
-        return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
+        // $branch = Branch::all();
+        // $member = member::get();
+        // $message = Message::orderBy('created_at', 'desc')->get();
+        // return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
     }
 
     //add patient medical records
@@ -328,6 +324,7 @@ class saveDataController extends Controller
             DB::beginTransaction();
             $patient_detail = PatientDetails::create([
                 'patient_id' => $request->patient_id,
+                'patient_session_id' => $request->session_id,
                 'branch_id' => $user_branch_id,
                 'doctor_id' => Auth::user()->id,
                 'medics_type' => $request->medics_type,
@@ -335,6 +332,7 @@ class saveDataController extends Controller
                 'description' => $request->medical_description
             ]);
 
+            // return $request->session_id;
             PatientDetailItem::create([
                 'patient_details_id' => $patient_detail->id,
                 'viral_load' => $request->viral_load,

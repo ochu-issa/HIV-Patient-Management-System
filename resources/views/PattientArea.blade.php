@@ -46,11 +46,17 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="text-center col col-md-12">
-                                        <label for="">Enter Pattient Number</label>
-                                        <input type="text" name="pattient_number" class="form-control"
-                                            placeholder="MM/20/0000" id=""> <br>
-                                        <button class="btn btn-block btn-primary"><span class="fa fa-search"></span> Search
-                                            here</button>
+                                        <label for="">Enter Pattient Number</label><br><br>
+                                        <select  name="pattient_number" class="form-control select2">
+                                            <option value="" selected disabled></option>
+                                            @foreach ($patients as $patient)
+                                                <option value="{{$patient->pattient_number}}">{{$patient->pattient_number}}</option>
+                                            @endforeach
+                                        </select> <br>
+                                        <div class="form-group">
+                                            <button class="btn btn-block btn-primary"><span class="fa fa-search"></span> Search here</button>
+                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div><!-- /.card-body -->

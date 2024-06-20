@@ -34,9 +34,18 @@
                     });
                 </script>
             @endif
+
+
             <div class="row">
                 <div class="col col-md-3"> </div>
                 <div class="col col-md-6">
+                    @if (session('alert-info'))
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-info"></i> Alert!</h5>
+                            {{ session('alert-info') }}
+                        </div>
+                    @endif
                     <div class="card card-widget widget-user-2">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-primary">
@@ -56,28 +65,41 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        Age <span class="float-right badge bg-primary">{{ Carbon\Carbon::parse($patient->dob)->age }}</span>
+                                        Age <span
+                                            class="float-right badge bg-primary">{{ Carbon\Carbon::parse($patient->dob)->age }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        Phone Number <span class="float-right badge bg-primary">{{ $patient->phone_number }}</span>
+                                        Phone Number <span
+                                            class="float-right badge bg-primary">{{ $patient->phone_number }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        Branch Registered <span class="float-right badge bg-primary">{{ $patient->Branch->branch_name }}</span>
+                                        Branch Registered <span
+                                            class="float-right badge bg-primary">{{ $patient->Branch->branch_name }}</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="form-group row">
+
+
+
                         <div class="col col-md-6">
-                            <button class="btn btn-success"><span class="fa fa-hourglass"></span> Open Session</button>
+                            <form action="{{ route('patient-sessions.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                                <button type="submit" class="btn btn-success"><span class="fa fa-hourglass"></span>
+                                    Open Session</button>
+                            </form>
                         </div>
+
                         <div class="col col-md-6">
-                            <button class="btn btn-danger float-right"><span class="fa fa-ban"></span> Just Check</button>
+                            <a href="{{ route('pattientarea') }}" class="btn btn-danger float-right"><span
+                                    class="fa fa-ban"></span> Just Check</a>
                         </div>
                     </div>
                 </div>
