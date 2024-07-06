@@ -53,7 +53,7 @@
                                 <img class="img-circle elevation-2" src="../../dist/img/profile-1.png" alt="User Avatar">
                             </div>
                             <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username">{{ $patient->f_name . ' ' . $patient->f_name }}</h3>
+                            <h3 class="widget-user-username">{{ $patient->f_name . ' ' . $patient->l_name }}</h3>
                             <h5 class="widget-user-desc">{{ $patient->pattient_number }}</h5>
                         </div>
                         <div class="card-footer p-0">
@@ -89,11 +89,11 @@
 
 
                         <div class="col col-md-6">
-                            <form action="{{ route('patient-sessions.store') }}" method="POST">
+                            <form action="{{ route('otp-codes.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="patient_id" value="{{ $patient->id }}">
-                                <button type="submit" class="btn btn-success"><span class="fa fa-hourglass"></span>
-                                    Open Session</button>
+                                <button type="submit" class="btn btn-success"><span class="fa fa-paper-plane"></span>
+                                    Send OTP</button>
                             </form>
                         </div>
 

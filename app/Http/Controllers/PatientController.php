@@ -52,11 +52,8 @@ class PatientController extends Controller
             $id = Auth::user()->member_id;
             $user_branch_id = member::where('id', $id)->first()->branch_id;
 
-            $highest_member_id = member::max('id');
-            $new_pattient_id = $highest_member_id + 1;
 
             $pattient = Pattient::create([
-                'id' => $new_pattient_id,
                 'f_name' => $request->f_name,
                 'l_name' => $request->l_name,
                 'gender' => $request->gender,
@@ -70,7 +67,7 @@ class PatientController extends Controller
 
             $random_password = Str::random(6);
             $user = User::create([
-                'member_id' => $pattient->id,
+                'member_id' => null,
                 'role_id' => null,
                 'username' => $pattient_number,
                 'password' => Hash::make($random_password)

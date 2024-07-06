@@ -143,7 +143,9 @@ class retrieveDataController extends Controller
         if (Auth::user()->hasRole('Super-Admin') ||  Auth::user()->hasRole('Branch-Admin') || Auth::user()->hasRole('Receptionist')) {
 
             $data = [
-                'patients' => Pattient::select('id', 'pattient_number')->get(),
+                'patients' => Pattient::select('id', 'pattient_number')
+                    ->orderBy('id', 'desc')
+                    ->get(),
             ];
             return view('PattientArea')->with($data);
         } else {

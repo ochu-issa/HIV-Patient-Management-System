@@ -35,7 +35,7 @@ class User extends Authenticatable
 
     public function pattient()
     {
-        return $this->belongsTo(Pattient::class, 'member_id', 'id');
+        return $this->belongsTo(Pattient::class, 'username', 'pattient_number');
     }
 
     public function getBranchNameAttribute()
@@ -43,6 +43,13 @@ class User extends Authenticatable
         $member = member::where('id', $this->member_id)->first();
 
         return $member->branch ? $member->branch->branch_name : 'No branch name available';
+    }
+
+    public function getFullNameAttribute()
+    {
+        $member = $this->member;
+
+        return $member->f_name.' '.$member->l_name;
     }
 
     public function getActiveSessionsAttribute()

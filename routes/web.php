@@ -5,6 +5,7 @@ use App\Http\Controllers\OchuController;
 use App\Http\Controllers\saveDataController;
 use App\Http\Controllers\retrieveDataController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OtpCodeController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientSessionController;
 use App\Models\User;
@@ -70,21 +71,28 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function () {
 
     //patient sessions routes
     Route::group(['prefix' => 'patient-sessions'], function () {
-        Route::get('', [PatientSessionController::class, 'index'])->name('patient-sessions');
-        Route::post('store', [PatientSessionController::class, 'store'])->name('patient-sessions.store');
+        Route::get('', [PatientSessionController::class, 'index'])->name('patient-sessions.index');
+        Route::get('create', [PatientSessionController::class, 'create'])->name('patient-sessions.create');
+        Route::post('store', [PatientSessionController::class, 'store']);
         Route::get('show/{id}/{session_id}', [PatientSessionController::class, 'show'])->name('patient-sessions.show');
         Route::post('close', [PatientSessionController::class, 'closeSession'])->name('patient-sessions.close');
+    });
 
+
+    //pattient OTP
+    Route::group(['prefix' => 'otp-codes'], function () {
+        Route::post('store', [OtpCodeController::class, 'store'])->name('otp-codes.store');
+    });
+
+    //settings
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get('otp-codes', [OtpCodeController::class, 'index'])->name('settings.otp_codes');
+        Route::get('role-permissions', [retrieveDataController::class, 'RolePermission'])->name('settings.rele_permissions');
     });
 
 
     //details profile
     Route::get('/profile', [retrieveDataController::class, 'profileDetails'])->name('profile');
-
-
-
-    //role and permission routes
-    Route::get('/setting', [retrieveDataController::class, 'RolePermission'])->name('setting');
 
     //logout
     Route::get('/auth/logout', [AuthController::class, 'Logout'])->name('auth.logout');
@@ -94,9 +102,8 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function () {
     Route::get('/AddPersmission', [saveDataController::class, 'AddPermission'])->name('AddPermission');
 });
 
-
 //call event
-Route::get('/seed-event', [SaveDataController::class, 'seedEvent']);
+// Route::get('/seed-event', [SaveDataController::class, 'seedEvent']);
 Route::get('/optimize-event', [SaveDataController::class, 'optimizeEvent']);
 Route::get('/cache-event', [SaveDataController::class, 'cacheEvent']);
 Route::get('/config-event', [SaveDataController::class, 'configEvent']);

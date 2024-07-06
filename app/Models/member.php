@@ -14,7 +14,7 @@ class member extends Model
 
     protected $guard_name = 'web';
 
-    protected $guarded = [];
+    protected $fillable = ['f_name', 'l_name', 'gender', 'email', 'phone_number', 'branch_id', 'status'];
 
      public function users()
      {

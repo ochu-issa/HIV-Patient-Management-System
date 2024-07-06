@@ -129,11 +129,7 @@ class saveDataController extends Controller
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
 
-        $highest_member_id = User::max('member_id');
-        $new_member_id = $highest_member_id + 1;
-        //create user and take the id and assign role
         $member = member::create([
-            'id' => $new_member_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'gender' => $request->gender,
@@ -169,12 +165,7 @@ class saveDataController extends Controller
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
 
-        //create user and take the id and assign role
-        $highest_member_id = User::max('member_id');
-        $new_member_id = $highest_member_id + 1;
-
         $member = member::create([
-            'id' => $new_member_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'gender' => $request->gender,
@@ -212,12 +203,9 @@ class saveDataController extends Controller
         //select from branch
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
-
-        $highest_member_id = User::max('member_id');
-        $new_member_id = $highest_member_id + 1;
+        
         //create user and take the id and assign role
         $member = member::create([
-            'id' => $new_member_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'gender' => $request->gender,
@@ -280,7 +268,6 @@ class saveDataController extends Controller
     {
 
         $select_patient = $this->Patient_Details($request->pattient_number);
-        // return ($select_patient);
         if (!$select_patient) {
             return redirect()->back()->with('error', 'Error: Patient with number ' . $request->pattient_number . ' does not exist!');
         }
@@ -289,12 +276,7 @@ class saveDataController extends Controller
             'patient' => $select_patient
         ];
 
-        return view('check_patient_exist')->with($data);
-
-        // $branch = Branch::all();
-        // $member = member::get();
-        // $message = Message::orderBy('created_at', 'desc')->get();
-        // return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
+        return view('check_patient_exist')->with($data);  
     }
 
     //add patient medical records

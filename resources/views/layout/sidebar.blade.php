@@ -38,8 +38,10 @@
           <nav class="mt-2">
               <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                   data-accordion="false">
-                  <li class="nav-header active" style="background: white; color: #343a40; font-weight: bold">Today is
-                      {{ Carbon\Carbon::parse('today')->format('D m, Y') }}</li>
+                  <li class="nav-header active"
+                      style="background: white; font-size: 12px; color: #343a40; font-weight: bold">Today is
+                      {{-- {{ Carbon\Carbon::parse('today')->format('D m, Y') }}</li> --}}
+                      {{ Date('l jS \of F Y') }}</li>
                   <li class="nav-header active">NAVIGATIONS</li>
 
                   {{-- //psttient area --}}
@@ -54,32 +56,45 @@
                           </a>
                       </li>
                   @endif
-                  @auth
-                      @can('Access-Pattient')
-                          <li class="nav-item">
-                              <a href="{{ route('pattientarea') }}" class="nav-link">
-                                  <i class="nav-icon fas fa-th"></i>
-                                  <p>
-                                      Pattients Area
-                                      {{-- <span class="right badge badge-danger">New</span> --}}
-                                  </p>
-                              </a>
-                          </li>
-                      @endcan
-                  @endauth
 
-
-                  @canany(['Create-Branch', 'View-Branch', 'Edit-Branch', 'Delete-Branch'])
-                      {{-- @canany(['Create-Pattient', 'View-Pattient', 'Edit-Pattient', 'Delete-Pattient']) --}}
-                      <li class="nav-item">
-                          <a href="{{ route('branches') }}" class="nav-link">
-                              <i class="nav-icon fas fa-hospital"></i>
+                  @can('Access-Pattient')
+                      <li class="nav-item menu-close ">
+                          <a href="#" class="nav-link">
+                              <i class="nav-icon fa fa-tasks"></i>
                               <p>
-                                  Branches
+                                  Actions
+                                  <i class="right fas fa-angle-left"></i>
                               </p>
                           </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="{{ route('pattientarea') }}" class="nav-link">
+                                      <i class="nav-icon fas fa-th"></i>
+                                      <p>
+                                          Pattients Area
+                                      </p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('patient-sessions.index') }}" class="nav-link">
+                                      <i class="nav-icon fas fa-calendar-check"></i>
+                                      <p>
+                                          Sessions
+                                      </p>
+                                  </a>
+                              </li>
+                          </ul>
                       </li>
-                  @endcanany
+                  @endcan
+
+                  <li class="nav-item">
+                      <a href="{{ route('profile') }}" class="nav-link">
+                          <i class="nav-icon fas fa-address-book"></i>
+                          <p>
+                              Profile
+                          </p>
+                      </a>
+                  </li>
                   <li class="nav-item menu-close ">
                       <a href="#" class="nav-link">
                           <i class="nav-icon fa fa-users"></i>
@@ -128,24 +143,44 @@
                           @endcanany
                       </ul>
                   </li>
-                  <li class="nav-item">
-                      <a href="{{ route('profile') }}" class="nav-link">
-                          <i class="nav-icon fas fa-address-book"></i>
-                          <p>
-                              Profile
-                          </p>
-                      </a>
-                  </li>
-
                   @if (Auth::user()->hasRole('Super-Admin'))
                       @can('Setting')
-                          <li class="nav-item">
-                              <a href="{{ route('setting') }}" class="nav-link">
-                                  <i class="nav-icon fas fa-cog"></i>
+                          <li class="nav-item menu-close ">
+                              <a href="#" class="nav-link">
+                                  <i class="nav-icon fa fa-cogs"></i>
                                   <p>
                                       Settings
+                                      <i class="right fas fa-angle-left"></i>
                                   </p>
                               </a>
+                              <ul class="nav nav-treeview">
+                                  @canany(['Create-Branch', 'View-Branch', 'Edit-Branch', 'Delete-Branch'])
+                                      <li class="nav-item">
+                                          <a href="{{ route('branches') }}" class="nav-link">
+                                              <i class="nav-icon fas fa-hospital"></i>
+                                              <p>
+                                                  Branches
+                                              </p>
+                                          </a>
+                                      </li>
+                                  @endcanany
+                                  <li class="nav-item">
+                                      <a href="{{ route('settings.otp_codes') }}" class="nav-link">
+                                          <i class="nav-icon fas fa-key"></i>
+                                          <p>
+                                              OTP Codes
+                                          </p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('settings.rele_permissions') }}" class="nav-link">
+                                          <i class="nav-icon fas fa-lock"></i>
+                                          <p>
+                                              Role and Permissions
+                                          </p>
+                                      </a>
+                                  </li>
+                              </ul>
                           </li>
                       @endcan
                   @endif
