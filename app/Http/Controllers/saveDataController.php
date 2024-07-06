@@ -5,20 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Branch;
-use App\Models\BranchAdmin;
-use App\Models\Receptionist;
-use App\Models\Doctor;
 use App\Models\member;
 use App\Models\Message;
+use App\Models\PatientDetailItem;
 use App\Models\PatientDetails;
 use App\Models\Pattient;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 use PDF;
 use Illuminate\Support\Facades\File;
+
 //use Barryvdh\DomPDF\PDF;
 
 class saveDataController extends Controller
@@ -128,7 +129,6 @@ class saveDataController extends Controller
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
 
-        //create user and take the id and assign role
         $member = member::create([
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
@@ -165,7 +165,6 @@ class saveDataController extends Controller
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
 
-        //create user and take the id and assign role
         $member = member::create([
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
@@ -204,7 +203,7 @@ class saveDataController extends Controller
         //select from branch
         $branchName = $request->branchname;
         $branch = Branch::where('branch_name', $branchName)->first();
-
+        
         //create user and take the id and assign role
         $member = member::create([
             'f_name' => $request->f_name,
@@ -226,54 +225,7 @@ class saveDataController extends Controller
     }
 
     //this crud for Pattient
-    public function AddPattient(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'f_name' => 'required|string|max:255',
-            'l_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:Male,Female',
-            'address' => 'required|string|max:255',
-            'phone_number' => 'required|numeric|unique:receptionists',
-            //'pattient_number' => 'required|numeric|unique:receptionists',
-        ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Error: Something went wrong!');
-        }
-
-        // Generate current month and date
-        $month = date('m');
-        $date = date('d');
-
-        // Generate a random 4 digit number
-        $pattient_number = mt_rand(1000, 9999);
-
-        // Concatenate month, date and patient number
-        $pattient_number = 'MM/' . $month + $date . '/' . $pattient_number;
-
-        $check_pattient_number = Pattient::where('pattient_number', $pattient_number)->first();
-
-        // Loop until a unique patient number is found
-        while ($check_pattient_number) {
-            $pattient_number = mt_rand(1000, 9999);
-            $pattient_number = 'MM/' . $month + $date . '/' . $pattient_number;
-            $check_pattient_number = Pattient::where('pattient_number', $pattient_number)->first();
-        }
-        //dd($pattient_number);
-        $id = Auth::user()->member_id;
-        $user_branch_id = member::where('id', $id)->first()->branch_id;
-        //dd($user_branch_id);
-        $pattient = new Pattient;
-        $pattient->f_name = $request->f_name;
-        $pattient->l_name = $request->l_name;
-        $pattient->gender = $request->gender;
-        $pattient->address = $request->address;
-        $pattient->phone_number = $request->phone_number;
-        $pattient->pattient_number = $pattient_number;
-        $pattient->branch_id = $user_branch_id;
-        $pattient->save();
-        return redirect()->back()->with('success', 'Pattient Addedd successfully!');
-    }
 
     //those Permission Issues
     public function AddPermission(Request $request)
@@ -297,12 +249,17 @@ class saveDataController extends Controller
         $patientinfo = Pattient::where('pattient_number', $PatientNumber)->first();
         // Check if $patientinfo is not null before proceeding
         if ($patientinfo) {
-            $medicsData = PatientDetails::where('patient_id', $patientinfo->id)->orderBy('created_at', 'Desc')->get();
+            $medicsData = PatientDetails::join('patient_detail_items', 'patient_detail_items.patient_details_id', '=', 'patient_details.id')
+                ->where('patient_id', $patientinfo->id)
+                ->select(
+                    'patient_details.*',
+                    'patient_detail_items.*',
+                )
+                ->orderBy('patient_details.id', 'Desc')
+                ->get();
 
-            // Add the medicsData to the patientinfo object
             $patientinfo->medicsData = $medicsData;
         }
-
         return $patientinfo;
     }
 
@@ -310,16 +267,16 @@ class saveDataController extends Controller
     public function SearchPatient(Request $request)
     {
 
-        $patientNumber = $request->pattient_number;
-        $select_patient = $this->Patient_Details($patientNumber);
+        $select_patient = $this->Patient_Details($request->pattient_number);
         if (!$select_patient) {
-            return redirect()->back()->with('error', 'Error: Patient with number ' . $patientNumber . ' does not exist!');
-        } else {
-            $branch = Branch::all();
-            $member = member::get();
-            $message = Message::orderBy('created_at', 'desc')->get();
-            return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
+            return redirect()->back()->with('error', 'Error: Patient with number ' . $request->pattient_number . ' does not exist!');
         }
+
+        $data = [
+            'patient' => $select_patient
+        ];
+
+        return view('check_patient_exist')->with($data);  
     }
 
     //add patient medical records
@@ -329,25 +286,55 @@ class saveDataController extends Controller
             'medics_type' => 'required',
             'hiv_level' => 'required',
             'medical_description' => 'required',
+            'viral_load' => 'required',
+            'cd4_count' => 'required',
+            'allergies' => 'required',
+            'blood_pressure' => 'required',
+            'medication_adherence' => 'required',
+            'weight' => 'required',
+            'art_regimen' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Error: Something went wrong!');
+            return redirect()->back()->with('error', $validator->getMessageBag());
         }
 
         $id = Auth::user()->member_id;
         $user_branch_id = member::where('id', $id)->first()->branch_id;
-        PatientDetails::create([
-            'patient_id' => $request->patient_id,
-            'branch_id' => $user_branch_id,
-            'doctor_id' => Auth::user()->id,
-            'medics_type' => $request->medics_type,
-            'HIV_level' => $request->hiv_level,
-            'description' => $request->medical_description,
-        ]);
-        $patientNumber = $request->pattient_number;
-        return redirect()->back()->with('success', 'Medical record addedd successfully!');
-        // return $this->Patient_information($patientNumber)->with('success', 'Medical record added successfully!');
+
+        try {
+            DB::beginTransaction();
+            $patient_detail = PatientDetails::create([
+                'patient_id' => $request->patient_id,
+                'patient_session_id' => $request->session_id,
+                'branch_id' => $user_branch_id,
+                'doctor_id' => Auth::user()->id,
+                'medics_type' => $request->medics_type,
+                'HIV_level' => $request->hiv_level,
+                'description' => $request->medical_description
+            ]);
+
+            // return $request->session_id;
+            PatientDetailItem::create([
+                'patient_details_id' => $patient_detail->id,
+                'viral_load' => $request->viral_load,
+                'cd4_count' => $request->cd4_count,
+                'allergies' => $request->allergies,
+                'blood_pressure' => $request->blood_pressure,
+                'medication_adherence' => $request->medication_adherence,
+                'diagnosis_date' => $request->diagnosis_date,
+                'weight' => $request->weight,
+                'art_regimen' => $request->art_regimen,
+                'next_appointment_date' => null, //will be filled in later with doctor 
+                'status' => 0
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Medical record addedd successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     //get Pattient Data
@@ -355,8 +342,7 @@ class saveDataController extends Controller
     {
         $select_patient = $this->Patient_Details($patientNumber);
         $branch = Branch::all();
-        //dd('test');
-        //return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch]);
+        // dd('test');
         return redirect()->route('searchpatient')->with(['patientData' => $select_patient, 'branch' => $branch], 'success', 'Medical record added successfully!');
     }
 
@@ -412,10 +398,37 @@ class saveDataController extends Controller
             // return view('pattientdetail', ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'messages' => $message]);
             $firstName = member::where('id', Auth::user()->member_id)->first()->f_name;
             $lastName = member::where('id', Auth::user()->member_id)->first()->l_name;
-            $fullName = $firstName.' '.$lastName;
+            $fullName = $firstName . ' ' . $lastName;
             $pdf = PDF::loadView('patientReport',  ['patientData' => $select_patient, 'branch' => $branch, 'member' => $member, 'fullName' => $fullName]);
 
-            return $pdf->download('Patient-'.$patientNumber.'.pdf');
+            return $pdf->download('Patient-' . $patientNumber . '.pdf');
         }
+    }
+
+    public function seedEvent()
+    {
+        Artisan::call('migrate:fresh --seed');
+        return response()->json('Succcess');
+    }
+
+    //call Optimize Event
+    public function optimizeEvent()
+    {
+        Artisan::call('optimize:clear');
+        return response()->json('Succcess');
+    }
+
+    //call clear Event
+    public function configEvent()
+    {
+        Artisan::call('config:clear');
+        return response()->json('Succcess');
+    }
+
+    //call clear Event
+    public function cacheEvent()
+    {
+        Artisan::call('cache:clear');
+        return response()->json('Succcess');
     }
 }

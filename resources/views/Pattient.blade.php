@@ -37,9 +37,11 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">All Pattients</h3>
-                    <button type="button" class="btn btn-small btn-primary float-right" data-toggle="modal"
-                        data-target="#modal-lg"><i class="fa fa-plus"></i> Register new
-                        Pattient</button>
+                    @can('Create-Pattient')
+                        <button type="button" class="btn btn-small btn-primary float-right" data-toggle="modal"
+                            data-target="#modal-lg"><i class="fa fa-plus"></i> Register new
+                            Pattient</button>
+                    @endcan
                 </div>
 
                 <!-- /.card-header -->
@@ -50,12 +52,14 @@
                                 <th>S/No</th>
                                 <th>Full Name</th>
                                 <th>Gender</th>
+                                <th>Date of Birth</th>
+                                <th>Age</th>
                                 <th>Address</th>
                                 <th>Phone Number</th>
                                 <th>Pattent Number</th>
                                 {{-- <th>View Process</th> --}}
                                 @if (!Auth::user()->hasRole('Receptionist'))
-                                <th>Action</th>
+                                    <th>Action</th>
                                 @endif
 
                             </tr>
@@ -66,16 +70,22 @@
                                     <td>{{ $no }}</td>
                                     <td>{{ $pattient->f_name }} {{ $pattient->l_name }}</td>
                                     <td>{{ $pattient->gender }} </td>
+                                    <td>{{ Carbon\Carbon::parse($pattient->dob)->format('M d, Y') }} </td>
+                                    <?php
+                                    $dob = Carbon\Carbon::parse($pattient->dob);
+                                    ?>
+                                    <td>{{ $dob->age }} </td>
                                     <td>{{ $pattient->address }} </td>
                                     <td>{{ $pattient->phone_number }} </td>
                                     <td>{{ $pattient->pattient_number }}</td>
                                     {{-- <td><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span> view</button> --}}
                                     </td>
                                     @if (!Auth::user()->hasRole('Receptionist'))
-                                    <td>
-                                        <button class="btn btn-secondary btn-sm"><span class="fa fa-edit"></span></button>
-                                        <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
-                                    </td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><span
+                                                    class="fa fa-edit"></span></button>
+                                            <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
+                                        </td>
                                     @endif
                                 </tr>
                                 @php
@@ -101,7 +111,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{route('addpattient')}}">
+                        <form action="{{ route('addpattient') }}" method="POST">
+                            @csrf
                             <p>
                             <div class="row">
                                 <div class="col col-md-6">
@@ -131,8 +142,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col col-md-12">
-                                    <label for="">Phone Number</label>
+                                <div class="col col-md-6">
+                                    <label for="">Date of birth</label>
+                                    <input type="date" name="dob" class="form-control" required>
+                                </div>
+                                <div class="col col-md-6">
+                                    <label for="">Phone number</label>
                                     <input type="text" name="phone_number" class="form-control" id=""
                                         placeholder="255626560698" required>
                                 </div>
@@ -144,7 +159,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Register </button>
                     </div>
-                </form>
+                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
