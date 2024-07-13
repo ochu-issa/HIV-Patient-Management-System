@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function () {
     Route::get('/pattientarea', [retrieveDataController::class, 'PattientArea'])->name('pattientarea');
 
     Route::post('/Addpattient', [PatientController::class, 'store'])->name('addpattient');
+    Route::post('patient/update/password', [PatientController::class, 'update'])->name('patient.update.password');
 
     //Patient details Route
     Route::get('/SearchPatient', [saveDataController::class, 'SearchPatient'])->name('searchpatient');
@@ -68,6 +69,8 @@ Route::group(['middleware' => ['auth', 'prevent_back_history']], function () {
     Route::post('/SendMessage', [saveDataController::class, 'SendMessage'])->name('sendmessage');
     Route::post('/DeleteMessage', [saveDataController::class, 'DeleteMessage'])->name('deletemessage');
     Route::post('/generateReport', [saveDataController::class, 'generateReport'])->name('generatereport');
+
+
 
     //patient sessions routes
     Route::group(['prefix' => 'patient-sessions'], function () {

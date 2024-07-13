@@ -68,7 +68,7 @@
                             @foreach ($pattients as $pattient)
                                 <tr>
                                     <td>{{ $no }}</td>
-                                    <td>{{ $pattient->f_name }} {{ $pattient->l_name }}</td>
+                                    <td>{{ $pattient->full_name }}</td>
                                     <td>{{ $pattient->gender }} </td>
                                     <td>{{ Carbon\Carbon::parse($pattient->dob)->format('M d, Y') }} </td>
                                     <?php
@@ -76,7 +76,11 @@
                                     ?>
                                     <td>{{ $dob->age }} </td>
                                     <td>{{ $pattient->address }} </td>
-                                    <td>{{ $pattient->phone_number }} </td>
+                                    <td>
+                                        <a href="#" data-toggle="modal" data-target="#modal-phone{{ $pattient->id }}">
+                                            {{ $pattient->phone_number }}
+                                        </a>
+                                    </td>
                                     <td>{{ $pattient->pattient_number }}</td>
                                     {{-- <td><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span> view</button> --}}
                                     </td>
@@ -84,13 +88,58 @@
                                         <td>
                                             <button class="btn btn-secondary btn-sm"><span
                                                     class="fa fa-edit"></span></button>
-                                            <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
                                         </td>
                                     @endif
                                 </tr>
                                 @php
                                     $no++;
                                 @endphp
+
+
+                                <div class="modal fade" id="modal-phone{{ $pattient->id }}">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Change {{ $pattient->full_name }} Phone's Number
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('patient.update.password') }}" method="POST">
+                                                    @csrf
+                                                    <p>
+                                                    <div class="row">
+                                                        <div class="col col-md-12">
+                                                            <label for="">Phone number</label>
+                                                            <input type="text" name="phone_number" class="form-control"
+                                                                id="" placeholder="255626560698" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col col-md-12">
+                                                            <label for="">Your password</label>
+                                                            <input type="password" name="password" class="form-control"
+                                                                id="" placeholder="*********" required>
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" value="{{ $pattient->id }}" name="patient_id">
+                                                    </p>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save Change </button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
                             @endforeach
                         </tbody>
                     </table>

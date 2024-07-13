@@ -57,24 +57,27 @@
                       </li>
                   @endif
 
-                  @can('Access-Pattient')
-                      <li class="nav-item menu-close ">
-                          <a href="#" class="nav-link">
-                              <i class="nav-icon fa fa-tasks"></i>
-                              <p>
-                                  Actions
-                                  <i class="right fas fa-angle-left"></i>
-                              </p>
-                          </a>
-                          <ul class="nav nav-treeview">
+
+                  <li class="nav-item menu-close ">
+                      <a href="#" class="nav-link">
+                          <i class="nav-icon fa fa-tasks"></i>
+                          <p>
+                              Actions
+                              <i class="right fas fa-angle-left"></i>
+                          </p>
+                      </a>
+                      <ul class="nav nav-treeview">
+                          @if (Auth::user()->hasRole(['Super-Admin', 'Receptionist', 'Branch-Admin']))
                               <li class="nav-item">
                                   <a href="{{ route('pattientarea') }}" class="nav-link">
                                       <i class="nav-icon fas fa-th"></i>
                                       <p>
-                                          Pattients Area
+                                          Patients Area
                                       </p>
                                   </a>
                               </li>
+                          @endif
+                          @if (Auth::user()->hasRole(['Super-Admin', 'Receptionist', 'Doctor', 'Branch-Admin']))
                               <li class="nav-item">
                                   <a href="{{ route('patient-sessions.index') }}" class="nav-link">
                                       <i class="nav-icon fas fa-calendar-check"></i>
@@ -83,9 +86,9 @@
                                       </p>
                                   </a>
                               </li>
-                          </ul>
-                      </li>
-                  @endcan
+                          @endif
+                      </ul>
+                  </li>
 
                   <li class="nav-item">
                       <a href="{{ route('profile') }}" class="nav-link">

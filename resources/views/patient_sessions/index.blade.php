@@ -37,8 +37,13 @@
             <!-- Small boxes (Stat box) -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"><span class="badge badge-success">Active</span> Sessions at <b>{{$branch_name}}</b></h3>
-                    <a href="{{route('patient-sessions.create')}}" class="btn btn-small btn-primary float-right"><i class="fa fa-plus"></i> Create Session</a>
+                    <h3 class="card-title"><span class="badge badge-success">Active</span> Sessions at
+                        <b>{{ $branch_name }}</b>
+                    </h3>
+                    @if (Auth::user()->hasRole(['Super-Admin', 'Receptionist', 'Branch-Admin']))
+                        <a href="{{ route('patient-sessions.create') }}" class="btn btn-small btn-primary float-right"><i
+                                class="fa fa-plus"></i> Create Session</a>
+                    @endif
                 </div>
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-striped">
@@ -54,12 +59,13 @@
                         <tbody>
                             @foreach ($patient_sessions as $index => $session)
                                 <tr>
-                                    <td>{{$index+1}}</td>
-                                    <td>{{$session->patient->f_name.' '.$session->patient->l_name}}</td>
-                                    <td>{{$session->patient->gender}}</td>
-                                    <td>{{$session->patient->pattient_number}}</td>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $session->patient->f_name . ' ' . $session->patient->l_name }}</td>
+                                    <td>{{ $session->patient->gender }}</td>
+                                    <td>{{ $session->patient->pattient_number }}</td>
                                     <td>
-                                        <a href="{{route('patient-sessions.show', ['id' => $session->patient->id, 'session_id' => $session->id])}}" class="btn btn-success btn-sm">
+                                        <a href="{{ route('patient-sessions.show', ['id' => $session->patient->id, 'session_id' => $session->id]) }}"
+                                            class="btn btn-success btn-sm">
                                             <span class="fa fa-eye"></span> Attend
                                         </a>
                                     </td>

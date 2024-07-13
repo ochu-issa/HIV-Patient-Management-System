@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -49,26 +50,29 @@ class User extends Authenticatable
     {
         $member = $this->member;
 
-        return $member->f_name.' '.$member->l_name;
+        return $member->f_name . ' ' . $member->l_name;
     }
 
     public function getActiveSessionsAttribute()
     {
-        $patient_sessions = PatientSession::with(['patient' => function ($query) {
-            $query->select('id', 'f_name', 'l_name', 'pattient_number', 'gender');
-        }])
+        $query = PatientSession::query()
+            ->with(['patient' => function ($query) {
+                $query->select('id', 'f_name', 'l_name', 'pattient_number', 'gender');
+            }])
             ->join('branches', 'branches.id', '=', 'patient_sessions.branch_id')
-            ->where('patient_sessions.branch_id', Auth::user()->member->branch_id)
             ->where('patient_sessions.is_active', 1)
             ->select(
                 'patient_sessions.id',
                 'patient_sessions.patient_id',
                 'patient_sessions.branch_id'
             )
-            ->orderBy('patient_sessions.id', 'desc')
-            ->get();
+            ->orderBy('patient_sessions.id', 'desc');
 
-        return $patient_sessions;
+        if (!Auth::user()->hasRole('Super-Admin')) {
+            $query->where('patient_sessions.branch_id', Auth::user()->member->branch_id);
+        }
+
+        return $query->get();
     }
     /**
      * The attributes that should be hidden for serialization.

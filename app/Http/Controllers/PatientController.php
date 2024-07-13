@@ -53,7 +53,7 @@ class PatientController extends Controller
             $user_branch_id = member::where('id', $id)->first()->branch_id;
 
 
-            $pattient = Pattient::create([
+            Pattient::create([
                 'f_name' => $request->f_name,
                 'l_name' => $request->l_name,
                 'gender' => $request->gender,
@@ -72,7 +72,7 @@ class PatientController extends Controller
                 'username' => $pattient_number,
                 'password' => Hash::make($random_password)
             ]);
-            
+
             $full_name = $request->f_name . ' ' . $request->l_name;
             $phone_number = $request->phone_number;
             $this->sendSms($full_name, $phone_number, $user->username, $random_password);
@@ -143,5 +143,28 @@ class PatientController extends Controller
                 // return response("Error sending message: " . $response);
             }
         }
+    }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages());
+        }
+
+        $user = Auth::user();
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()->with('error', 'Error: Wrong password!');
+        }
+
+        $patient = Pattient::find($request->patient_id);
+        $patient->phone_number = $request->phone_number;
+        $patient->save();
+
+        return redirect()->back()->with('success', 'Phone number has been changed');
     }
 }
