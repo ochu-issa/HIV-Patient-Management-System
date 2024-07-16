@@ -83,7 +83,7 @@
                                 <li class="nav-item"><a class="nav-link" href="#activity" data-toggle="tab">Chat Room</a>
 
                                 </li>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {{-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <li>
                                     <form action="{{ route('generatereport') }}" method="POST">
                                         @csrf
@@ -92,7 +92,7 @@
                                         <button type="submit" class="btn btn-success float-right"><span
                                                 class="fa fa-download"></span> Export</button>
                                     </form>
-                                </li>
+                                </li> --}}
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <li>
                                     <button type="button" class="btn btn-danger" data-toggle="modal"

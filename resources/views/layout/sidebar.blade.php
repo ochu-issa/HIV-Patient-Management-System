@@ -11,7 +11,7 @@
 
           @foreach ($roles as $role)
               @if ($user->hasRole($role))
-                  <span class="brand-text font-weight-light">HMS-{{ strtoupper($role) }}</span>
+                  <span class="brand-text font-weight-light">HMIS-{{ strtoupper($role) }}</span>
               @endif
           @endforeach
 
@@ -57,24 +57,27 @@
                       </li>
                   @endif
 
-                  @can('Access-Pattient')
-                      <li class="nav-item menu-close ">
-                          <a href="#" class="nav-link">
-                              <i class="nav-icon fa fa-tasks"></i>
-                              <p>
-                                  Actions
-                                  <i class="right fas fa-angle-left"></i>
-                              </p>
-                          </a>
-                          <ul class="nav nav-treeview">
+
+                  <li class="nav-item menu-close ">
+                      <a href="#" class="nav-link">
+                          <i class="nav-icon fa fa-tasks"></i>
+                          <p>
+                              Actions
+                              <i class="right fas fa-angle-left"></i>
+                          </p>
+                      </a>
+                      <ul class="nav nav-treeview">
+                          @if (Auth::user()->hasRole(['Super-Admin', 'Receptionist', 'Branch-Admin']))
                               <li class="nav-item">
                                   <a href="{{ route('pattientarea') }}" class="nav-link">
                                       <i class="nav-icon fas fa-th"></i>
                                       <p>
-                                          Pattients Area
+                                          Patient ID
                                       </p>
                                   </a>
                               </li>
+                          @endif
+                          @if (Auth::user()->hasRole(['Super-Admin', 'Receptionist', 'Doctor', 'Branch-Admin']))
                               <li class="nav-item">
                                   <a href="{{ route('patient-sessions.index') }}" class="nav-link">
                                       <i class="nav-icon fas fa-calendar-check"></i>
@@ -83,9 +86,9 @@
                                       </p>
                                   </a>
                               </li>
-                          </ul>
-                      </li>
-                  @endcan
+                          @endif
+                      </ul>
+                  </li>
 
                   <li class="nav-item">
                       <a href="{{ route('profile') }}" class="nav-link">
@@ -95,54 +98,54 @@
                           </p>
                       </a>
                   </li>
-                  <li class="nav-item menu-close ">
-                      <a href="#" class="nav-link">
-                          <i class="nav-icon fa fa-users"></i>
-                          <p>
-                              Manage Users
-                              <i class="right fas fa-angle-left"></i>
-                          </p>
-                      </a>
-                      <ul class="nav nav-treeview">
-                          @canany(['Create-Pattient', 'View-Pattient', 'Edit-Pattient', 'Delete-Pattient'])
+                  @if (Auth::user()->hasRole(['Super-Admin', 'Receptionist', 'Branch-Admin']))
+                      <li class="nav-item menu-close ">
+                          <a href="#" class="nav-link">
+                              <i class="nav-icon fa fa-users"></i>
+                              <p>
+                                  Manage Users
+                                  <i class="right fas fa-angle-left"></i>
+                              </p>
+                          </a>
+                          <ul class="nav nav-treeview">
                               <li class="nav-item">
                                   <a href="{{ route('pattient') }}" class="nav-link">
                                       <i class="nav-icon far fas fa-procedures"></i>
-                                      <p> Pattients</p>
+                                      <p> Patients</p>
                                   </a>
                               </li>
-                          @endcanany
 
-                          @canany(['Create-Receptionist', 'View-Receptionist', 'Edit-Receptionist',
-                              'Delete-Receptionist'])
-                              <li class="nav-item">
-                                  <a href="{{ route('receptionist') }}" class="nav-link">
-                                      <i class="nav-icon fa fa-user-nurse"></i></i>
-                                      <p> Receptionist</p>
-                                  </a>
-                              </li>
-                          @endcanany
+                              @canany(['Create-Receptionist', 'View-Receptionist', 'Edit-Receptionist',
+                                  'Delete-Receptionist'])
+                                  <li class="nav-item">
+                                      <a href="{{ route('receptionist') }}" class="nav-link">
+                                          <i class="nav-icon fa fa-user-nurse"></i></i>
+                                          <p> Receptionist</p>
+                                      </a>
+                                  </li>
+                              @endcanany
 
-                          @canany(['Create-Doctor', 'View-Doctor', 'Edit-Doctor', 'Delete-Doctor'])
-                              <li class="nav-item">
-                                  <a href="{{ route('doctor') }}" class="nav-link">
-                                      <i class="nav-icon far fa fa-user-md"></i>
-                                      <p> Doctors</p>
-                                  </a>
-                              </li>
-                          @endcanany
+                              @canany(['Create-Doctor', 'View-Doctor', 'Edit-Doctor', 'Delete-Doctor'])
+                                  <li class="nav-item">
+                                      <a href="{{ route('doctor') }}" class="nav-link">
+                                          <i class="nav-icon far fa fa-user-md"></i>
+                                          <p> Doctors</p>
+                                      </a>
+                                  </li>
+                              @endcanany
 
-                          @canany(['Create-Branch-Admin', 'View-Branch-Admin', 'Edit-Branch-Admin',
-                              'Delete-Branch-Admin'])
-                              <li class="nav-item">
-                                  <a href="{{ route('branchadmin') }}" class="nav-link">
-                                      <i class="nav-icon far fas fa-id-card-alt"></i>
-                                      <p> Branch Admin</p>
-                                  </a>
-                              </li>
-                          @endcanany
-                      </ul>
-                  </li>
+                              @canany(['Create-Branch-Admin', 'View-Branch-Admin', 'Edit-Branch-Admin',
+                                  'Delete-Branch-Admin'])
+                                  <li class="nav-item">
+                                      <a href="{{ route('branchadmin') }}" class="nav-link">
+                                          <i class="nav-icon far fas fa-id-card-alt"></i>
+                                          <p> Branch Admin</p>
+                                      </a>
+                                  </li>
+                              @endcanany
+                          </ul>
+                      </li>
+                  @endif
                   @if (Auth::user()->hasRole('Super-Admin'))
                       @can('Setting')
                           <li class="nav-item menu-close ">

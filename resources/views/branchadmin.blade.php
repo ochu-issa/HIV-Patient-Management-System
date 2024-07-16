@@ -54,7 +54,7 @@
                                 <th>Email</th>
                                 <th>Phone Number</th>
                                 <th>Branch Name</th>
-                                <th>Action</th>
+                                {{-- <th>Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -66,10 +66,10 @@
                                     <td>{{ $branchAdmin->email }} </td>
                                     <td>{{ $branchAdmin->phone_number }} </td>
                                     <td>{{$branches->where('id', $branchAdmin->branch_id)->first()->branch_name}}</td>
-                                    <td>
+                                    {{-- <td>
                                         <button class="btn btn-secondary btn-sm"><span class="fa fa-edit"></span></button>
                                         <button class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 @php
                                     $no++;

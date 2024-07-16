@@ -39,14 +39,14 @@
                 <div class="col col-md-5 ">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Pattient Area</h3>
+                            <h3 class="card-title">Patient Area</h3>
                         </div> <!-- /.card-body -->
                         <form action="{{route("searchpatient")}}" method="GET">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
                                     <div class="text-center col col-md-12">
-                                        <label for="">Enter Pattient Number</label><br><br>
+                                        <label for="">Enter Patient Number</label><br><br>
                                         <select  name="pattient_number" class="form-control select2">
                                             <option value="" selected disabled></option>
                                             @foreach ($patients as $patient)
