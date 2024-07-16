@@ -64,10 +64,15 @@
                                     <td>{{ $session->patient->gender }}</td>
                                     <td>{{ $session->patient->pattient_number }}</td>
                                     <td>
-                                        <a href="{{ route('patient-sessions.show', ['id' => $session->patient->id, 'session_id' => $session->id]) }}"
-                                            class="btn btn-success btn-sm">
-                                            <span class="fa fa-eye"></span> Attend
-                                        </a>
+                                        @if (Auth::user()->hasRole(['Super-Admin', 'Branch-Admin', 'Doctor']))
+                                            <a href="{{ route('patient-sessions.show', ['id' => $session->patient->id, 'session_id' => $session->id]) }}"
+                                                class="btn btn-success btn-sm">
+                                                <span class="fa fa-eye"></span> Attend
+                                            </a>
+                                        @else
+                                            <span class="badge badge-success">Active</span>
+                                        @endif
+
                                     </td>
                                 </tr>
                             @endforeach

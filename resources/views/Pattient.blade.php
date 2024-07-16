@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Manage Pattient</li>
+                        <li class="breadcrumb-item active">Manage Patient</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -36,11 +36,11 @@
             @endif
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">All Pattients</h3>
+                    <h3 class="card-title">All Patients</h3>
                     @can('Create-Pattient')
                         <button type="button" class="btn btn-small btn-primary float-right" data-toggle="modal"
                             data-target="#modal-lg"><i class="fa fa-plus"></i> Register new
-                            Pattient</button>
+                            Patient</button>
                     @endcan
                 </div>
 
@@ -56,7 +56,7 @@
                                 <th>Age</th>
                                 <th>Address</th>
                                 <th>Phone Number</th>
-                                <th>Pattent Number</th>
+                                <th>Patient Number</th>
                                 {{-- <th>View Process</th> --}}
                                 @if (!Auth::user()->hasRole('Receptionist'))
                                     <th>Action</th>
@@ -113,7 +113,7 @@
                                                     <p>
                                                     <div class="row">
                                                         <div class="col col-md-12">
-                                                            <label for="">Phone number</label>
+                                                            <label for="">Enter New phone number</label>
                                                             <input type="text" name="phone_number" class="form-control"
                                                                 id="" placeholder="255626560698" required>
                                                         </div>
@@ -121,7 +121,7 @@
 
                                                     <div class="row">
                                                         <div class="col col-md-12">
-                                                            <label for="">Your password</label>
+                                                            <label for="">Enter your account password</label>
                                                             <input type="password" name="password" class="form-control"
                                                                 id="" placeholder="*********" required>
                                                         </div>
